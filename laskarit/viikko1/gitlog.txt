@@ -1,0 +1,114 @@
+commit 0f0c2d497823b4bc06091d91b23cd296d0627c45
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:41:21 2018 +0200
+
+    file1 deleted and file2 renamed to file22
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 9363a6095005f915f2f8f52b13e4992325a5e778
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:35:58 2018 +0200
+
+    tiedostoja and files (1-3) created
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 8fd5ca4825f24d06b2849e9153ccbe43f0fc4da4
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:28:22 2018 +0200
+
+    eka.txt and kolmas.txt modified
+
+ eka.txt    | 6 +++++-
+ kolmas.txt | 3 ++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+commit 92b3752b38360e5ba38bc24138c789309eb4cc87
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:25:11 2018 +0200
+
+    tiedosto.txt renamed as eka.txt
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 822d64ecf2dc270e8b4488a9955f7c38d0b7450a
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:23:43 2018 +0200
+
+    toinen.txt deleted
+
+ toinen.txt | 1 -
+ 1 file changed, 1 deletion(-)
+
+commit 4a62820266776a7326eb97668746b3a8a2bbccd7
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:18:54 2018 +0200
+
+    tiedosto.txt modified
+
+ tiedosto.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+commit 8cf65fa5cb41525f353f8d5221bc644ef19c5668
+Author: Alisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 11:16:51 2018 +0200
+
+    text added into tiedosto.txt
+
+ tiedosto.txt | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+commit 034bc9cb85eedfc6658536ae1e8901d8485f21cc
+Author: Alisa Elizarova <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 10:56:23 2018 +0200
+
+    directory stuff and t.txt created
+
+ stuff/t.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit b33e6fefcab56c0fd7836efea46edf7025edd247
+Author: Alisa Elizarova <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 10:53:31 2018 +0200
+
+    kolmas.txt and toinen.txt modified
+
+ kolmas.txt | 2 ++
+ toinen.txt | 1 +
+ 2 files changed, 3 insertions(+)
+
+commit 5222b3e1877afe42a7b7d2dc7903c31a2b5b948e
+Author: Alisa Elizarova <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 10:51:33 2018 +0200
+
+    kolmas.txt created
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 648138f9bc778d6bd4cfc0e10903f3012d8fc70a
+Author: elizarovaalisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 10:45:50 2018 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit 928c001361cc4686ad636664bee33737f7e7c8f3
+Author: elizarovaalisa <elizarova.alisa@gmail.com>
+Date:   Tue Nov 6 10:41:05 2018 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
