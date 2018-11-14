@@ -1,7 +1,7 @@
 # Requirements Analysis
 
 ### Purpose
-Tetris a real-time game. To play it an user needs to sign up, which makes it possible to save their results in order to continue the game later.
+Tetris a real-time game. To play it an user needs to sign up, which makes possible to save their results in order to continue the game later.
 
 ### Users
 We have only one type of user, "a normal user" (a player).
