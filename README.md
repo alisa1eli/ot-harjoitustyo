@@ -20,6 +20,7 @@ When a user signed in, he/she
     can delete their history of results
     can delete their account
 
+---------------------------
 
 A link to the requirements analysis is [here](https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/RequirementsAnalysis.md)
 
