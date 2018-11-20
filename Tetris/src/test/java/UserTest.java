@@ -31,4 +31,9 @@ public class UserTest {
         this.user.addAnOldGame(120);
         assertTrue(1 == this.user.getOldGames().size());
     }
+    @Test
+    public void whenAnOldGameAddedTheScoreSavedCorrectly() {
+        this.user.addAnOldGame(120);
+        assertTrue(120 == this.user.getOldGames().get(0).getScore());
+    }
 }

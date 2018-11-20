@@ -27,6 +27,18 @@ public class OldGame implements Comparable<OldGame>{
         }
         return -1;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public Date getDate() {
+        return date;
+    }
     
     
 }
