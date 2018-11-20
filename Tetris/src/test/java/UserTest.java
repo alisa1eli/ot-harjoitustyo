@@ -36,4 +36,11 @@ public class UserTest {
         this.user.addAnOldGame(120);
         assertTrue(120 == this.user.getOldGames().get(0).getScore());
     }
+    @Test 
+    public void userCanDeleteAnOldGameWithItsId() {
+        this.user.addAnOldGame(120);
+        String id = this.user.getOldGames().get(0).getId();
+        this.user.deleteAnOldGame(id);
+        assertTrue(0 == this.user.getOldGames().size());
+    }
 }

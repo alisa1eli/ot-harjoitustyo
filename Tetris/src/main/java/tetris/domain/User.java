@@ -54,4 +54,11 @@ public class User {
         this.oldGames.add(a);
     }
     
+    public void deleteAnOldGame(String gameId) {
+        for (int a = 0; a<this.oldGames.size(); a++) {
+            if(this.oldGames.get(a).id == gameId) {
+                this.oldGames.remove(a);
+            }
+        }
+    }
 }

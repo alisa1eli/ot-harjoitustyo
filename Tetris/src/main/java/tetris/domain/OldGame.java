@@ -12,9 +12,9 @@ public class OldGame implements Comparable<OldGame>{
     Date date;
     
     public OldGame(User user, int score) {
-        this.id = user.getLogin();
-        this.score = score;
         this.date = new Date();
+        this.id = user.getLogin()+"."+this.date.toString();
+        this.score = score;
     }
     @Override
     public String toString() {
