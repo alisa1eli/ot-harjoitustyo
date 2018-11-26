@@ -9,30 +9,26 @@ import static java.util.Collections.sort;
  * @author alisaelizarova
  */
 public class User {
-    String login;
-    String password;
+    String id;
+    String name;
     ArrayList<OldGame> oldGames;
     
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
+    public User(String login, String name) {
+        this.id = login;
+        this.name = name;
         this.oldGames = new ArrayList<>();
     }
 
-    public String getLogin() {
-        return login;
+    public String getId() {
+        return id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return this.name;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ArrayList<OldGame> getOldGames() {
@@ -50,11 +46,11 @@ public class User {
     }
     
     public void addAnOldGame(int score) {
-        OldGame a = new OldGame(this, score);
+        OldGame a = new OldGame( score);
         this.oldGames.add(a);
     }
     
-    public void deleteAnOldGame(String gameId) {
+    public void deleteAnOldGame(int gameId) {
         for (int a = 0; a<this.oldGames.size(); a++) {
             if(this.oldGames.get(a).id == gameId) {
                 this.oldGames.remove(a);

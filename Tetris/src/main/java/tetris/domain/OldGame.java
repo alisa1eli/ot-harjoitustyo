@@ -7,20 +7,22 @@ import java.util.Date;
  * @author alisaelizarova
  */
 public class OldGame implements Comparable<OldGame>{
-    String id;
+    int id;
     int score;
-    Date date;
+    String date;
     
-    public OldGame(User user, int score) {
-        this.date = new Date();
-        this.id = user.getLogin()+"."+this.date.toString();
+    public OldGame(int score) {
+        this.date = this.dateToString(new Date());
+        this.id = -1;
         this.score = score;
     }
-    @Override
-    public String toString() {
-        return("Date : "+this.date.toString() + ", Score : "+this.score);
-    }
+    public OldGame(int id, int score, String date ) {
+        this.date = date;
+        this.id = id;
+        this.score = score;
+    }    
 
+    @Override
     public int compareTo(OldGame a) {
         if (a.score > this.score) {
             return 1;
@@ -28,7 +30,7 @@ public class OldGame implements Comparable<OldGame>{
         return -1;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -36,9 +38,21 @@ public class OldGame implements Comparable<OldGame>{
         return score;
     }
 
-    public Date getDate() {
+    public String getDate() {
+        return date;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public String dateToString(Date object) {
+        String date = object.getYear() + "."+object.getMonth()+
+                "."+object.getDay()+"."+object.getHours()+"."
+                + object.getMinutes() +"."+object.getSeconds();
         return date;
     }
     
-    
+    public String toString() {
+        return this.id +" | "+this.score+" | "+ this.date;
+    }
 }
