@@ -6,4 +6,4 @@
 | 20.11 | 2.2 | maven project creating and working on User and OldGame classes |
 | 25.11 | 3.0 | databases |
 | 26.11 | 5.5 | development of Ui started |
- 
+| 27.11 | 3.0 | the 1st part of Ui done |
