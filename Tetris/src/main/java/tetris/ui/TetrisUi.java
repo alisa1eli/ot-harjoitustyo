@@ -23,6 +23,7 @@ import tetris.dao.Database;
 import tetris.dao.GameDao;
 import tetris.dao.UserDao;
 import tetris.domain.TetrisService;
+import tetris.domain.User;
 
 /**
  *
@@ -34,6 +35,8 @@ public class TetrisUi extends Application{
     private Scene signInOrSignUpScene;
     private Scene signInScene;
     private Scene signUpScene;
+    private Scene personalScene;
+    private User signedIn;
     
     @Override
     public void init() throws ClassNotFoundException {
@@ -44,6 +47,7 @@ public class TetrisUi extends Application{
         UserDao userDao = new UserDao(db);
   
         this.tetrisService = new TetrisService(gameDao, userDao);
+        this.signedIn = null;
     }
 
     @Override
@@ -60,23 +64,7 @@ public class TetrisUi extends Application{
         
         Button signInButton = new Button("Sign in");
         Button signUpButton = new Button("Sign up");
-        
-        
-        
-//        loginButton.setOnAction(e->{
-//            String username = usernameInput.getText();
-//            menuLabel.setText(username + " logged in...");
-//            if ( todoService.login(username) ){
-//                loginMessage.setText("");
-//                redrawTodolist();
-//                primaryStage.setScene(todoScene);  
-//                usernameInput.setText("");
-//            } else {
-//                loginMessage.setText("use does not exist");
-//                loginMessage.setTextFill(Color.RED);
-//            }      
-//        });  
-//        
+               
         signUpButton.setOnAction(e->{
             stage.setScene(signUpScene);   
         }); 
@@ -108,7 +96,13 @@ public class TetrisUi extends Application{
         TextField newNameInput = new TextField();
         Label newNameLabel = new Label("Name");
         newNameLabel.setPrefWidth(100);
-        newNamePane.getChildren().addAll(newNameLabel, newNameInput);        
+        newNamePane.getChildren().addAll(newNameLabel, newNameInput); 
+        
+        Button backSignUpButton = new Button("Back");
+        backSignUpButton.setPadding(new Insets(10));
+        backSignUpButton.setOnAction(e->{
+            stage.setScene(signInOrSignUpScene);   
+        });
         
         Label userCreationMessage = new Label();
         
@@ -139,9 +133,89 @@ public class TetrisUi extends Application{
  
         });  
         
-        newUserPane.getChildren().addAll(userCreationMessage, newUsernamePane, newNamePane, signUpSceneButton); 
+        newUserPane.getChildren().addAll(userCreationMessage, newUsernamePane, 
+                newNamePane, signUpSceneButton,backSignUpButton); 
        
         signUpScene = new Scene(newUserPane, 300, 250);
+        
+        // signInScene
+        
+        VBox signInPane = new VBox(10);
+        signInPane.setPadding(new Insets(10));
+        TextField loginSignIn = new TextField();
+        Label labelSignIn = new Label("Your login: ");
+        labelSignIn.setPrefWidth(100);
+        Button signInSceneButton = new Button("Sign In!");
+        signInSceneButton.setPadding(new Insets(10));
+        Button backSignInButton = new Button("Back");
+        backSignInButton.setPadding(new Insets(10));
+        Label signInSceneMessage = new Label();
+        
+        backSignInButton.setOnAction(e->{
+            stage.setScene(signInOrSignUpScene);   
+        });
+        
+        Label welcomePersonalSceneLabel = new Label("Oops, you are not signed in!");
+        
+        signInSceneButton.setOnAction(e->{
+            String login = loginSignIn.getText();
+   
+            try {
+                if ( this.tetrisService.userSignIn(login) ) {
+                    this.signedIn = this.tetrisService.getSignedInUser();
+                    welcomePersonalSceneLabel.setText("Welcome "+ this.signedIn.getName() +"!");
+                    stage.setScene(personalScene);
+                } else {
+                    signInSceneMessage.setText("Wrong login!");
+                    signInSceneMessage.setTextFill(Color.RED);
+                    
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+ 
+        });  
+        
+        signInPane.getChildren().addAll(signInSceneMessage, labelSignIn, loginSignIn, 
+                signInSceneButton, backSignInButton); 
+        
+        signInScene = new Scene(signInPane, 300, 250);
+        
+        // personalScene
+        
+        VBox personalScenePane = new VBox(10);
+        personalScenePane.setPadding(new Insets(10));
+
+        Button newGameButton = new Button("New game!");
+        newGameButton.setPadding(new Insets(10));
+        Label oldGamesLabel = new Label("Your best games: ");
+//        
+//        backSignInButton.setOnAction(e->{
+//            stage.setScene(signInOrSignUpScene);   
+//        });
+//        
+//        signInSceneButton.setOnAction(e->{
+//            String login = loginSignIn.getText();
+//   
+//            try {
+//                if ( this.tetrisService.userSignIn(login) ) {
+//                    stage.setScene(personalScene);
+//                } else {
+//                    signInSceneMessage.setText("Wrong login!");
+//                    signInSceneMessage.setTextFill(Color.RED);
+//                    
+//                }
+//            } catch (SQLException ex) {
+//                Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+// 
+//        });  
+//        
+        personalScenePane.getChildren().addAll(welcomePersonalSceneLabel,  
+                newGameButton, oldGamesLabel); 
+        
+        personalScene = new Scene(personalScenePane, 300, 250);
+        
         
         stage.setTitle("Tetris!");
         stage.show();

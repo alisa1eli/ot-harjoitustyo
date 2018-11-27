@@ -92,11 +92,11 @@ public class UserDao implements Dao<User, String> {
     }
     @Override
     public User save(User object) throws SQLException {
-        // if id isn't unique, returns NULL
-//        User alreadyExists = this.findOne(object.getId());
-//        if (alreadyExists != null) {
-//            return null;
-//        }
+//         if id isn't unique, returns NULL
+        User alreadyExists = this.findOne(object.getId());
+        if (alreadyExists != null) {
+            return null;
+        }
         
         Connection conn = db.getConnection();
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO User"

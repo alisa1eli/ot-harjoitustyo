@@ -16,11 +16,20 @@ import tetris.dao.UserDao;
 public class TetrisService {
     private GameDao gameDao;
     private UserDao userDao;
-    private User loggedIn;
+    private User signedIn;
     
     public TetrisService( GameDao gameDao, UserDao userDao) {
         this.userDao = userDao;
         this.gameDao = gameDao;
+        this. signedIn = null;
+    }
+    
+    public boolean userSignIn (String login) throws SQLException { 
+        this.signedIn = userDao.findOne(login);
+        if ( this.signedIn != null) {
+            return true;
+        } 
+        return false;
     }
     
     /**
@@ -44,5 +53,12 @@ public class TetrisService {
         }
 
         return true;
+    }
+    
+    public User getSignedInUser () {
+        if (this.signedIn != null) {
+            return this.signedIn;
+        }
+        return null;
     }
 }
