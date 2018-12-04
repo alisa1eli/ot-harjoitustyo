@@ -21,7 +21,7 @@ import tetris.domain.User;
  * @author alisaelizarova
  */
 public class GameDao implements Dao<OldGame, Integer> {
-    private Database db;
+    private final Database db;
     
     public GameDao(Database db) {
         this.db = db;
@@ -36,7 +36,7 @@ public class GameDao implements Dao<OldGame, Integer> {
         
         ResultSet rs = stmt.executeQuery();
         
-        while(rs.next()) {
+        while (rs.next()) {
             String date = rs.getString("date");
 //            String[] d = rs.getString("date").split(Pattern.quote("."));
 //            int sec = Integer.parseInt(d[5]);
@@ -46,7 +46,7 @@ public class GameDao implements Dao<OldGame, Integer> {
 //            int month = Integer.parseInt(d[1]);
 //            int year = Integer.parseInt(d[0]);
             
-            games.add(new OldGame(rs.getInt("id"), rs.getInt("score"), date ));
+            games.add(new OldGame(rs.getInt("id"), rs.getInt("score"), date));
         }
 
         rs.close();
@@ -81,9 +81,6 @@ public class GameDao implements Dao<OldGame, Integer> {
         return object;
     }
 
-    
-    
-    
     @Override
     public OldGame findOne(Integer key) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

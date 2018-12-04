@@ -6,7 +6,7 @@ import java.util.Date;
  *
  * @author alisaelizarova
  */
-public class OldGame implements Comparable<OldGame>{
+public class OldGame implements Comparable<OldGame> {
     int id;
     int score;
     String date;
@@ -16,7 +16,7 @@ public class OldGame implements Comparable<OldGame>{
         this.id = -1;
         this.score = score;
     }
-    public OldGame(int id, int score, String date ) {
+    public OldGame(int id, int score, String date) {
         this.date = date;
         this.id = id;
         this.score = score;
@@ -46,13 +46,13 @@ public class OldGame implements Comparable<OldGame>{
     }
     
     public String dateToString(Date object) {
-        String date = object.getYear() + "."+object.getMonth()+
-                "."+object.getDay()+"."+object.getHours()+"."
-                + object.getMinutes() +"."+object.getSeconds();
+        String date = object.getYear() + "." + object.getMonth() + 
+                "." + object.getDay() + "." + object.getHours() + "."
+                + object.getMinutes() + "." + object.getSeconds();
         return date;
     }
     
     public String toString() {
-        return this.id +" | "+this.score+" | "+ this.date;
+        return this.id + " | " + this.score + " | " + this.date;
     }
 }

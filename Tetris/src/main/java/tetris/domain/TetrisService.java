@@ -20,18 +20,18 @@ public class TetrisService {
     private Game game;
     private Boolean gameStarted;
     
-    public TetrisService( GameDao gameDao, UserDao userDao) {
+    public TetrisService(GameDao gameDao, UserDao userDao) {
         this.userDao = userDao;
         this.gameDao = gameDao;
-        this. signedIn = null;
+        this.signedIn = null;
         this.game = new Game();
         this.gameStarted = false;
         
     }
     
-    public boolean userSignIn (String login) throws SQLException { 
+    public boolean userSignIn(String login) throws SQLException { 
         this.signedIn = userDao.findOne(login);
-        if ( this.signedIn != null) {
+        if (this.signedIn != null) {
             return true;
         } 
         return false;
@@ -53,14 +53,14 @@ public class TetrisService {
         User user = new User(login, name);
         try {
             userDao.save(user);
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
 
         return true;
     }
     
-    public User getSignedInUser () {
+    public User getSignedInUser() {
         if (this.signedIn != null) {
             return this.signedIn;
         }

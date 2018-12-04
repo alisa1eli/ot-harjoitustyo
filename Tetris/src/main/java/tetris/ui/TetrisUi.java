@@ -37,7 +37,7 @@ import tetris.domain.Game;
  *
  * @author alisaelizarova
  */
-public class TetrisUi extends Application{
+public class TetrisUi extends Application {
     
     private TetrisService tetrisService;
     private Scene signInOrSignUpScene;
@@ -75,11 +75,11 @@ public class TetrisUi extends Application{
         Button signInButton = new Button("Sign in");
         Button signUpButton = new Button("Sign up");
                
-        signUpButton.setOnAction(e->{
+        signUpButton.setOnAction(e-> {
             stage.setScene(signUpScene);   
         }); 
         
-        signInButton.setOnAction(e->{
+        signInButton.setOnAction(e-> {
             stage.setScene(signInScene);   
         }); 
         
@@ -110,7 +110,7 @@ public class TetrisUi extends Application{
         
         Button backSignUpButton = new Button("Back");
         backSignUpButton.setPadding(new Insets(10));
-        backSignUpButton.setOnAction(e->{
+        backSignUpButton.setOnAction(e-> {
             stage.setScene(signInOrSignUpScene);   
         });
         
@@ -119,32 +119,32 @@ public class TetrisUi extends Application{
         Button signUpSceneButton = new Button("Sign up!");
         signUpSceneButton.setPadding(new Insets(10));
 
-        signUpSceneButton.setOnAction(e->{
+        signUpSceneButton.setOnAction(e-> {
             String login = newLoginInput.getText();
             String name = newNameInput.getText();
    
-            if ( login.length() <= 3 || name.length() <= 3 ) {
+            if (login.length() <= 3 || name.length() <= 3) {
                 userCreationMessage.setText("Your login or name is too short!");
                 userCreationMessage.setTextFill(Color.RED);              
-            } else try {
-                if (this.tetrisService.createUser(login, name)){
-                    userCreationMessage.setText("");
-                    signInOrSignUpSceneMessage.setText("New user successfully created!");
-                    signInOrSignUpSceneMessage.setTextFill(Color.GREEN);
-                    stage.setScene(signInOrSignUpScene);
+            } else 
+                try {
+                    if (this.tetrisService.createUser(login, name)) {
+                        userCreationMessage.setText("");
+                        signInOrSignUpSceneMessage.setText("New user successfully created!");
+                        signInOrSignUpSceneMessage.setTextFill(Color.GREEN);
+                        stage.setScene(signInOrSignUpScene);
+                    } else {
+                        userCreationMessage.setText("This login is already taken!");        
+                        userCreationMessage.setTextFill(Color.RED);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                else {
-                    userCreationMessage.setText("This login is already taken!");        
-                    userCreationMessage.setTextFill(Color.RED);
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
-            }
  
         });  
         
         newUserPane.getChildren().addAll(userCreationMessage, newUsernamePane, 
-                newNamePane, signUpSceneButton,backSignUpButton); 
+                newNamePane, signUpSceneButton, backSignUpButton); 
        
         signUpScene = new Scene(newUserPane, 300, 250);
         
@@ -161,19 +161,19 @@ public class TetrisUi extends Application{
         backSignInButton.setPadding(new Insets(10));
         Label signInSceneMessage = new Label();
         
-        backSignInButton.setOnAction(e->{
+        backSignInButton.setOnAction(e-> {
             stage.setScene(signInOrSignUpScene);   
         });
         
         Label welcomePersonalSceneLabel = new Label("Oops, you are not signed in!");
         
-        signInSceneButton.setOnAction(e->{
+        signInSceneButton.setOnAction(e-> {
             String login = loginSignIn.getText();
    
             try {
-                if ( this.tetrisService.userSignIn(login) ) {
+                if (this.tetrisService.userSignIn(login)) {
                     this.signedIn = this.tetrisService.getSignedInUser();
-                    welcomePersonalSceneLabel.setText("Welcome "+ this.signedIn.getName() +"!");
+                    welcomePersonalSceneLabel.setText("Welcome " + this.signedIn.getName() + "!");
                     stage.setScene(personalScene);
                 } else {
                     signInSceneMessage.setText("Wrong login!");
@@ -206,7 +206,7 @@ public class TetrisUi extends Application{
         
 //        AnimationTimer timer = new GameTimer();
         
-        newGameButton.setOnAction(e->{
+        newGameButton.setOnAction(e-> {
             Canvas gameField = new Canvas(420, 770);
             
             Game gamee = new Game();
@@ -232,7 +232,7 @@ public class TetrisUi extends Application{
                                
                 @Override
                 public void handle(long now) {
-                    if (now - edellinen < (long)500000000) {
+                    if (now - edellinen < (long) 500000000) {
                         return;
                     }
                     
@@ -251,26 +251,26 @@ public class TetrisUi extends Application{
                     }
                     gamee.update();
                     game.setOnKeyPressed(e -> {
-                            if (e.getCode() == KeyCode.RIGHT) {
-                                gamee.makeMove(1);
-                            } else if (e.getCode() == KeyCode.LEFT) {
-                                gamee.makeMove(2);
-                            } else if (e.getCode() == KeyCode.DOWN) {
-                                gamee.makeMove(3);
-                            }
-                            gamee.update();
-                            for (int y = 0; y < height; y++) {
-                                for (int x = 0; x < lenght; x++) {
-                                    if (gamee.visible()[x][y] == 1) {
-                                        gc.setFill(Color.BLACK);
-                                        gc.fillRect(x * 35, y * 35, 35, 35);
-                                    } else {
-                                        gc.setFill(Color.WHITE);
-                                        gc.fillRect(x * 35, y * 35, 35, 35);
-                                    }
+                        if (e.getCode() == KeyCode.RIGHT) {
+                            gamee.makeMove(1);
+                        } else if (e.getCode() == KeyCode.LEFT) {
+                            gamee.makeMove(2);
+                        } else if (e.getCode() == KeyCode.DOWN) {
+                            gamee.makeMove(3);
+                        }
+                        gamee.update();
+                        for (int y = 0; y < height; y++) {
+                            for (int x = 0; x < lenght; x++) {
+                                if (gamee.visible()[x][y] == 1) {
+                                    gc.setFill(Color.BLACK);
+                                    gc.fillRect(x * 35, y * 35, 35, 35);
+                                } else {
+                                    gc.setFill(Color.WHITE);
+                                    gc.fillRect(x * 35, y * 35, 35, 35);
                                 }
                             }
-                        });
+                        }
+                    });
                     if (gamee.gameover()) {
                         System.out.println("Going to gameOverScene!");
                         stage.setScene(gameOverScene);
@@ -452,7 +452,7 @@ public class TetrisUi extends Application{
         
         Button backToPersonalPageButton = new Button("Back!");
                
-        backToPersonalPageButton.setOnAction(e->{
+        backToPersonalPageButton.setOnAction(e-> {
             stage.setScene(personalScene);   
         }); 
         

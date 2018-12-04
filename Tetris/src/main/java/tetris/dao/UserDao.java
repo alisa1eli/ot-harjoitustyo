@@ -17,12 +17,13 @@ import tetris.domain.User;
  * @author alisaelizarova
  */
 public class UserDao implements Dao<User, String> {
-    private Database db;
+    private final Database db;
     
     public UserDao(Database db) {
         this.db = db;
     } 
     
+    @Override
     public User findOne(String key) throws SQLException {
         Connection connection = db.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM User WHERE id = ?");
@@ -38,7 +39,7 @@ public class UserDao implements Dao<User, String> {
         String name = rs.getString("name");
         
 
-        User u= new User(id, name);
+        User u = new User(id, name);
 
         rs.close();
         stmt.close();
@@ -47,7 +48,6 @@ public class UserDao implements Dao<User, String> {
         return u;
     }
     
-    // maybe not needed ... ????? 
     
     public User findOneByName(String name) throws SQLException {
         Connection connection = db.getConnection();
@@ -62,7 +62,7 @@ public class UserDao implements Dao<User, String> {
 
         String id = rs.getString("id");
        
-        User u= new User(id, name);
+        User u = new User(id, name);
 
         rs.close();
         stmt.close();
@@ -86,10 +86,10 @@ public class UserDao implements Dao<User, String> {
         stmt.close();
     }
     
-    
     public User saveOrUpdate(User object) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
     @Override
     public User save(User object) throws SQLException {
 //         if id isn't unique, returns NULL

@@ -50,16 +50,16 @@ public class Game {
         
         for (int y = this.heigth - 1; y >= 0; y--) {
             for (int x = 0; x < this.length; x++) {
-                if (this.field[x][y] == 1 ) {
+                if (this.field[x][y] == 1) {
                     if (this.roomUnder(x, y)) {
                         this.field[x][y] = 0;
-                        this.field[x][y+1] = 1;
+                        this.field[x][y + 1] = 1;
                     }
                 }
             }
         }
         this.aRowIsFull();
-        if(Arrays.deepToString(field).equals(beforeUpdate )) {
+        if (Arrays.deepToString(field).equals(beforeUpdate)) {
             this.addNewFigure(1);
             this.type = 1;
         }
@@ -78,7 +78,7 @@ public class Game {
         int sum = 0;
         for (int y = 0; y < this.heigth; y++) {
             for (int x = 0; x < this.length; x++) {
-                if(this.field[x][y] == 1) {
+                if (this.field[x][y] == 1) {
                     sum++;
                 }
             }
@@ -95,7 +95,7 @@ public class Game {
         int[][] v = new int[11][22];
         for (int y = 4; y < this.heigth; y++) {
             for (int x = 0; x < this.length; x++) {
-                v[x][y-4] = this.field[x][y];
+                v[x][y - 4] = this.field[x][y];
             }
         }
         return v;
@@ -126,21 +126,19 @@ public class Game {
     }
     public boolean onTheBottom() {
         int[][] p = this.getPosition();
-        this.printMatrix(p);
         int a = 0;
         int b = 0;
         if (p[0][0] == -1) {
             return true;
         }
         for (int x = 0; x < 4; x++) {
-            if (p[x][0] != -1 ) {
+            if (p[x][0] != -1) {
                 a++;
-                if (this.roomUnder(p[x][0],p[x][1])) {
+                if (this.roomUnder(p[x][0], p[x][1])) {
                     b++;
                 }
             }
         }
-        System.out.println(a+ ", b: "+b);
         if (a == b) {
             return false;
         }
@@ -149,7 +147,7 @@ public class Game {
     public boolean roomUnder(int x, int y) {
         if (y == 25) {
             return false;
-        } else if (this.field[x][y+1] == 0) {
+        } else if (this.field[x][y + 1] == 0) {
             return true;
         }
         return false;
@@ -163,17 +161,15 @@ public class Game {
                 if (position[0][a] != -1) {
                     int x = position[0][a];
                     int y = position[1][a];
-                    if(x < 10 && y < 25) {
-                        this.field[x][y]=0;
-                        this.field[x+1][y] = 1;
+                    if (x < 10 && y < 25) {
+                        this.field[x][y] = 0;
+                        this.field[x + 1][y] = 1;
                     }
                 } else {
                     return;
                 }
             } 
-        } 
-        // left
-        else if (move == 2) {
+        } else if (move == 2) {    // left
             for (int a = 0; a < 4; a++) {
                 if (position[0][a] != -1) {
                     int x = position[0][a];
@@ -181,54 +177,51 @@ public class Game {
                     if (x - 1 < 0) {
                         return;
                     }
-                    this.field[x][y]=0;
-                    this.field[x-1][y] = 1;
+                    this.field[x][y] = 0;
+                    this.field[x - 1][y] = 1;
                     
                 } else {
                     return;
                 }
             } 
-        } 
-        // Down
-        else if (move == 3) {
+        } else if (move == 3) {                 // down
             for (int a = 0; a < 4; a++) {
                 if (position[0][a] != -1) {
                     int x = position[0][a];
                     int y = position[1][a];
                     int newY = y;
-                    while(newY+1 <= 25) {
-                        if (this.field[x][newY+1] == 0) {
-                            newY = newY +1;
+                    while (newY + 1 <= 25) {
+                        if (this.field[x][newY + 1] == 0) {
+                            newY = newY + 1;
                         } else {
-                        break;
-                    }   
+                            break;
+                        }   
                     }
                     this.field[x][newY] = 1;
-                    this.field[x][y]=0;
+                    this.field[x][y] = 0;
                 }
-
             } 
         }
     }
     
     public int[][] getPosition() {
-        int r[][] = {{-1,-1,-1,-1}, {-1,-1,-1,-1}};
-        int r_x = 0;
+        int r[][] = {{-1, -1, -1, -1}, {-1, -1, -1, -1}};
+        int rX = 0;
         boolean moving = false;
         this.printMatrix(r);
-        for (int y = 0; y < this.heigth - 1 ; y++) {
+        for (int y = 0; y < this.heigth - 1; y++) {
             for (int x = 0; x < this.length; x++) {
                 if (this.field[x][y] == 1) {
-                    System.out.println(x +","+y);
-                    r[0][r_x] = x;
-                    r[1][r_x] = y;
+                    System.out.println(x + "," + y);
+                    r[0][rX] = x;
+                    r[1][rX] = y;
                     this.printMatrix(r);
-                    r_x++;
+                    rX++;
                 }
                 if (this.roomUnder(x, y)) {
                     moving = true;
                 }
-                if(r_x == this.type) {
+                if (rX == this.type) {
                     break;
                 }
             }
@@ -237,14 +230,14 @@ public class Game {
         if (moving) {
             return r;
         }
-        int[][] a = {{-1,-1,-1,-1}, {-1,-1,-1,-1}};
+        int[][] a = {{-1, -1, -1, -1}, {-1, -1, -1, -1}};
         return a;
         
     }
 
     public boolean gameover() {
-        for(int x = 0; x < this.length; x++) {
-            if(this.field[x][4]==1 && !this.roomUnder(x, 21)) {
+        for (int x = 0; x < this.length; x++) {
+            if (this.field[x][4] == 1 && !this.roomUnder(x, 21)) {
                 this.printMatrix(field);
                 return true;
             }

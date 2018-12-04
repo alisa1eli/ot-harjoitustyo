@@ -46,13 +46,13 @@ public class User {
     }
     
     public void addAnOldGame(int score) {
-        OldGame a = new OldGame( score);
+        OldGame a = new OldGame(score);
         this.oldGames.add(a);
     }
     
     public void deleteAnOldGame(int gameId) {
-        for (int a = 0; a<this.oldGames.size(); a++) {
-            if(this.oldGames.get(a).id == gameId) {
+        for (int a = 0; a < this.oldGames.size(); a++) {
+            if (this.oldGames.get(a).id == gameId) {
                 this.oldGames.remove(a);
             }
         }
