@@ -16,9 +16,8 @@ A user:
 When a user signed in, he/she
 
     can start a new game
-    can start an old game
-    can delete their history of results
-    can delete their account
+    can delete their history of results ( in developing )
+    can delete their account ( in developing )
 
 ---------------------------
 
