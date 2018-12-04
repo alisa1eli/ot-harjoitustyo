@@ -17,11 +17,16 @@ public class TetrisService {
     private GameDao gameDao;
     private UserDao userDao;
     private User signedIn;
+    private Game game;
+    private Boolean gameStarted;
     
     public TetrisService( GameDao gameDao, UserDao userDao) {
         this.userDao = userDao;
         this.gameDao = gameDao;
         this. signedIn = null;
+        this.game = new Game();
+        this.gameStarted = false;
+        
     }
     
     public boolean userSignIn (String login) throws SQLException { 
@@ -60,5 +65,17 @@ public class TetrisService {
             return this.signedIn;
         }
         return null;
+    }
+    public boolean gameStarted() {
+        return this.gameStarted;
+    }
+    public void setGameStart() {
+        this.gameStarted = true;
+    }
+    public Game getGame() {
+        return this.game;
+    }
+    public int[][] getVisible() {
+        return this.game.visible();
     }
 }
