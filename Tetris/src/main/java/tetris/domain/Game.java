@@ -27,6 +27,10 @@ public class Game {
         this.type = 1;
         
     }
+    
+    public void setField(int[][] a) {
+        this.field = a;
+    }
 
     public int[][] getField() {
         return field;
