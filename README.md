@@ -27,4 +27,4 @@ To see how many hours I spent on the project, click [here](https://github.com/al
 
 A link to the architecture is [here](https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/Architecture.md)
 
-A link to the new release is [here](https://github.com/alisa1eli/ot-harjoitustyo/releases/tag/viikko5)
+A link to the newest release is [here](https://github.com/alisa1eli/ot-harjoitustyo/releases/tag/viikko6)
