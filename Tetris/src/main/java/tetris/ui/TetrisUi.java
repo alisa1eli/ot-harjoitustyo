@@ -29,6 +29,8 @@ import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import tetris.domain.Game;
@@ -83,10 +85,10 @@ public class TetrisUi extends Application {
             stage.setScene(signInScene);   
         }); 
         
-        loginPane.getChildren().addAll(signInButton, signUpButton, signInOrSignUpSceneMessage);       
-        
-        signInOrSignUpScene = new Scene(loginPane, 300, 250);    
-
+        loginPane.getChildren().addAll( signInButton, signUpButton, signInOrSignUpSceneMessage);      
+        loginPane.setId("pane");
+        signInOrSignUpScene = new Scene(loginPane, 385, 770);    
+        signInOrSignUpScene.getStylesheets().add("file:style.css");
         
         stage.setScene(signInOrSignUpScene);
         
@@ -145,8 +147,9 @@ public class TetrisUi extends Application {
         
         newUserPane.getChildren().addAll(userCreationMessage, newUsernamePane, 
                 newNamePane, signUpSceneButton, backSignUpButton); 
-       
-        signUpScene = new Scene(newUserPane, 300, 250);
+        newUserPane.setId("pane");
+        signUpScene = new Scene(newUserPane, 385, 770);
+        signUpScene.getStylesheets().add("file:style.css");
         
         // signInScene
         
@@ -189,7 +192,7 @@ public class TetrisUi extends Application {
         signInPane.getChildren().addAll(signInSceneMessage, labelSignIn, loginSignIn, 
                 signInSceneButton, backSignInButton); 
         
-        signInScene = new Scene(signInPane, 300, 250);
+        signInScene = new Scene(signInPane, 385, 770);
         
         // personalScene
         
@@ -249,196 +252,51 @@ public class TetrisUi extends Application {
                             }
                         }
                     }
-                    gamee.update();
-                    game.setOnKeyPressed(e -> {
-                        if (e.getCode() == KeyCode.RIGHT) {
-                            gamee.makeMove(1);
-                        } else if (e.getCode() == KeyCode.LEFT) {
-                            gamee.makeMove(2);
-                        } else if (e.getCode() == KeyCode.DOWN) {
-                            gamee.makeMove(3);
-                        }
-                        gamee.update();
-                        for (int y = 0; y < height; y++) {
-                            for (int x = 0; x < lenght; x++) {
-                                if (gamee.visible()[x][y] == 1) {
-                                    gc.setFill(Color.BLACK);
-                                    gc.fillRect(x * 35, y * 35, 35, 35);
-                                } else {
-                                    gc.setFill(Color.WHITE);
-                                    gc.fillRect(x * 35, y * 35, 35, 35);
+                    if ( gamee.update() ) {
+                        game.setOnKeyPressed(e -> {
+                            if (e.getCode() == KeyCode.RIGHT) {
+                                gamee.makeMove(1);
+                            } else if (e.getCode() == KeyCode.LEFT) {
+                                gamee.makeMove(2);
+                            } else if (e.getCode() == KeyCode.DOWN) {
+                                gamee.makeMove(3);
+                            } else if (e.getCode() == KeyCode.UP) {
+                                gamee.rotate();
+                            }
+                            gamee.update();
+                            for (int y = 0; y < height; y++) {
+                                for (int x = 0; x < lenght; x++) {
+                                    if (gamee.visible()[x][y] == 1) {
+                                        gc.setFill(Color.BLACK);
+                                        gc.fillRect(x * 35, y * 35, 35, 35);
+                                    } else {
+                                        gc.setFill(Color.WHITE);
+                                        gc.fillRect(x * 35, y * 35, 35, 35);
+                                    }
                                 }
                             }
-                        }
-                    });
-                    if (gamee.gameover()) {
+                        });
+                    } else {
                         System.out.println("Going to gameOverScene!");
                         stage.setScene(gameOverScene);
                         this.stop();
-                        
                     }
                     this.edellinen = now;
                 }
                 
             }.start();
-//            new AnimationTimer() {
-//                long edellinen = 0;
-//                Game game = new Game();
-//
-//
-//                @Override
-//                public void handle(long nykyhetki) {
-//
-//                    int height = game.getHeigth();
-//                    int lenght = game.getLength();
-//                    int[][] a = game.visible();
-//
-//
-//                    if (nykyhetki - edellinen < 100000000) {
-//                        return;
-//                    }
-//
-//
-//
-//                    gc.setFill(Color.BLACK);
-//
-//                    for (int y = 0; y <= height; y--) {
-//                        for (int x = 0; x <= lenght; x++) {
-//                            if (a[x][y] == 1) {
-//                                gc.fillRect(x * 35, y * 35, 35, 35);
-//                            }
-//                        }
-//                    }
-//
-//
-//
-//                    game.update();
-//
-//                    this.edellinen = nykyhetki;
-//                    }
-//                }.start();
 
-            game = new Scene(asettelu);
+            game = new Scene(asettelu, 385, 770);
 
             stage.setScene(game);
             stage.show();
 
         });
-//            timer.start();
-//            {
-//            long edellinen = 0;
-//            Game game = new Game();
-// 
-//
-//            @Override
-//            public void handle(long nykyhetki) {
-//                
-//                int height = game.getHeigth();
-//                int lenght = game.getLength();
-//                int[][] a = game.visible();
-//                
-//                
-//                if (nykyhetki - edellinen < 100000000) {
-//                    return;
-//                }
-//                    
-//                
-//                   
-//                gc.setFill(Color.web("#010a23"));
-//                
-//                for (int y = 0; y <= height; y--) {
-//                    for (int x = 0; x <= lenght; x++) {
-//                        if (a[x][y] == 1) {
-//                            gc.setFill(Color.web("#010a23"));
-//                            gc.fillRect(x * 35, y * 35, 35, 35);
-//                        }
-//                    }
-//                }
-//                
-//                
-//                
-//                game.update();
-//
-//                this.edellinen = nykyhetki;
-//                }
-//            }.start();
-//        });
-//        
-//        backSignInButton.setOnAction(e->{
-//            stage.setScene(signInOrSignUpScene);   
-//        });
-//        
-//        signInSceneButton.setOnAction(e->{
-//            String login = loginSignIn.getText();
-//   
-//            try {
-//                if ( this.tetrisService.userSignIn(login) ) {
-//                    stage.setScene(personalScene);
-//                } else {
-//                    signInSceneMessage.setText("Wrong login!");
-//                    signInSceneMessage.setTextFill(Color.RED);
-//                    
-//                }
-//            } catch (SQLException ex) {
-//                Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-// 
-//        });  
-//        
+      
         personalScenePane.getChildren().addAll(welcomePersonalSceneLabel,  
                 newGameButton, oldGamesLabel); 
         
-        personalScene = new Scene(personalScenePane, 300, 250);
-        
-        // game scene
-        
-        
-        
-        
-//        if(this.tetrisService.gameStarted()) {
-//            new AnimationTimer() {
-//            long edellinen = 0;
-//            Game game = new Game();
-// 
-//
-//            @Override
-//            public void handle(long nykyhetki) {
-//                
-//                int height = game.getHeigth();
-//                int lenght = game.getLength();
-//                int[][] a = game.visible();
-//                
-//                
-//                if (nykyhetki - edellinen < 100000000) {
-//                    return;
-//                }
-//                    
-//                
-//                   
-//                gc.setFill(Color.web("#010a23"));
-//                
-//                for (int y = 0; y <= height; y--) {
-//                    for (int x = 0; x <= lenght; x++) {
-//                        if (a[x][y] == 1) {
-//                            gc.setFill(Color.web("#010a23"));
-//                            gc.fillRect(x * 35, y * 35, 35, 35);
-//                        }
-//                    }
-//                }
-//                
-//                
-//                
-//                game.update();
-//
-//                this.edellinen = nykyhetki;
-//                }
-//            }.start();
-//        }
-        
-       
-        
-//        game = new Scene(asettelu);    
-
+        personalScene = new Scene(personalScenePane, 385, 770);
         
         
         // gameoverScene
@@ -459,7 +317,7 @@ public class TetrisUi extends Application {
         
         gameOverPane.getChildren().addAll(gameOverMessage, backToPersonalPageButton);       
         
-        gameOverScene = new Scene(gameOverPane, 300, 250);    
+        gameOverScene = new Scene(gameOverPane, 385, 770);    
 
         
         stage.setScene(signInOrSignUpScene);
