@@ -9,5 +9,7 @@
 | 27.11 | 3.0 | the 1st part of Ui done |
 | 03.12 | 4.0 | Tetris game (1/3) |
 | 04.12 | 5.0 | tetris game (2/3) |
+| 10.12 | 8.0 | Updating logics of the app|
+| 11.12 | 7.0 | Updating complete. Rotation is possible for several blocks| 
 
-### So far, I've spent 13.2 hours on the project.
+### So far, I've spent 28.2 hours on the project.
