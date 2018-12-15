@@ -6,6 +6,8 @@
 package tetris.domain;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import tetris.dao.GameDao;
 import tetris.dao.UserDao;
 
@@ -29,9 +31,10 @@ public class TetrisService {
         
     }
     
-    public boolean userSignIn(String login) throws SQLException { 
+    public boolean userWithThatLoginFound(String login) throws SQLException { 
         this.signedIn = userDao.findOne(login);
         if (this.signedIn != null) {
+            this.signedIn.setOldGames(this.gameDao.findAllGamesOfOneUser(this.signedIn.getId()));
             return true;
         } 
         return false;
@@ -45,7 +48,6 @@ public class TetrisService {
     * 
     * @return true if a new user created, otherwise false 
     */ 
-    
     public boolean createUser(String login, String name) throws SQLException  {   
         if (userDao.findOne(login) != null) {
             return false;
@@ -62,6 +64,7 @@ public class TetrisService {
     
     public User getSignedInUser() {
         if (this.signedIn != null) {
+            
             return this.signedIn;
         }
         return null;
@@ -77,5 +80,28 @@ public class TetrisService {
     }
     public int[][] getVisible() {
         return this.game.visible();
+    }
+    /**
+    * this method adds an new OldGame to the db and at the same time to the user's list.
+    * 
+    * @param   points   (int) 
+    */
+    public void addAnOldGame(int points) throws SQLException {
+        OldGame game = this.gameDao.save(new OldGame(points), this.signedIn.getId());
+        this.signedIn.addAnOldGame(game);
+    }
+    
+    /**
+    * this method returns user's old games sorted by score. 
+    * The games with the highest scores are on the top.
+    * 
+    * @return   list of OldGames (ArrayList<OldGame>) 
+    */
+    public ArrayList<OldGame> getUsersOldGames() throws SQLException {
+        if(this.signedIn == null) {
+            return null;
+        }
+        ArrayList<OldGame> r = this.signedIn.getOldGamesSortedByScore();
+        return r;
     }
 }

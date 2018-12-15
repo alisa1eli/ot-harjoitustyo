@@ -24,6 +24,8 @@ public class main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Application.launch(TetrisUi.class);
-    }
-    
+        
+//        String text = "Game over! Your score is 10 .";
+//        System.out.println(Integer.parseInt(text.split(" ")[5]));
+    }  
 }

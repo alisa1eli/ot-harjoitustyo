@@ -13,8 +13,8 @@ public class User {
     String name;
     ArrayList<OldGame> oldGames;
     
-    public User(String login, String name) {
-        this.id = login;
+    public User(String id, String name) {
+        this.id = id;
         this.name = name;
         this.oldGames = new ArrayList<>();
     }
@@ -45,8 +45,7 @@ public class User {
         this.oldGames = oldGames;
     }
     
-    public void addAnOldGame(int score) {
-        OldGame a = new OldGame(score);
+    public void addAnOldGame(OldGame a) {
         this.oldGames.add(a);
     }
     

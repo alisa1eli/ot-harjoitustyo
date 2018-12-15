@@ -6,6 +6,7 @@
 package tetris.ui;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -27,13 +28,17 @@ import tetris.domain.User;
 
 import java.util.Random;
 import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import tetris.domain.Game;
+import tetris.domain.OldGame;
 
 /**
  *
@@ -47,8 +52,7 @@ public class TetrisUi extends Application {
     private Scene signUpScene;
     private Scene personalScene;
     private Scene gameOverScene;
-    private Scene game;
-    private User signedIn;
+    private Scene gameScene;
     
     @Override
     public void init() throws ClassNotFoundException {
@@ -59,7 +63,7 @@ public class TetrisUi extends Application {
         UserDao userDao = new UserDao(db);
   
         this.tetrisService = new TetrisService(gameDao, userDao);
-        this.signedIn = null;
+
     }
 
     @Override
@@ -67,15 +71,18 @@ public class TetrisUi extends Application {
         
         // signInOrSignUpScene
         
-        VBox loginPane = new VBox(10);
-        loginPane.setPadding(new Insets(20));
-        loginPane.setSpacing(30);
-        loginPane.setAlignment(Pos.CENTER);
-        Label signInOrSignUpSceneMessage = new Label();
+        VBox firstPagePane = new VBox(10);
+//        loginPane.setPadding(new Insets(20));
+//        loginPane.setSpacing(30);
+        firstPagePane.setAlignment(Pos.CENTER);
+        Label firstPageLabel = new Label();
+        firstPageLabel.setId("label");
 
         
         Button signInButton = new Button("Sign in");
+        signInButton.setId("button");
         Button signUpButton = new Button("Sign up");
+        signUpButton.setId("button");
                
         signUpButton.setOnAction(e-> {
             stage.setScene(signUpScene);   
@@ -85,9 +92,9 @@ public class TetrisUi extends Application {
             stage.setScene(signInScene);   
         }); 
         
-        loginPane.getChildren().addAll( signInButton, signUpButton, signInOrSignUpSceneMessage);      
-        loginPane.setId("pane");
-        signInOrSignUpScene = new Scene(loginPane, 385, 770);    
+        firstPagePane.getChildren().addAll(signInButton, signUpButton, firstPageLabel);      
+        firstPagePane.setId("basic");
+        signInOrSignUpScene = new Scene(firstPagePane, 385, 770);    
         signInOrSignUpScene.getStylesheets().add("file:style.css");
         
         stage.setScene(signInOrSignUpScene);
@@ -98,28 +105,38 @@ public class TetrisUi extends Application {
         
         HBox newUsernamePane = new HBox(10);
         newUsernamePane.setPadding(new Insets(10));
-        TextField newLoginInput = new TextField(); 
+        TextField newLoginInput = new TextField();
+        newLoginInput.setId("textfield");
         Label newUsernameLabel = new Label("Login");
+        newUsernameLabel.setId("label");
         newUsernameLabel.setPrefWidth(100);
         newUsernamePane.getChildren().addAll(newUsernameLabel, newLoginInput);
+        newUsernamePane.setAlignment(Pos.CENTER);
+        newUsernamePane.setPadding(new Insets(50));
      
         HBox newNamePane = new HBox(10);
         newNamePane.setPadding(new Insets(10));
         TextField newNameInput = new TextField();
+        newNameInput.setId("textfield");
         Label newNameLabel = new Label("Name");
+        newNameLabel.setId("label");
         newNameLabel.setPrefWidth(100);
         newNamePane.getChildren().addAll(newNameLabel, newNameInput); 
+        newNamePane.setAlignment(Pos.CENTER);
+        newNamePane.setPadding(new Insets(0, 50, 50, 50));
         
         Button backSignUpButton = new Button("Back");
         backSignUpButton.setPadding(new Insets(10));
         backSignUpButton.setOnAction(e-> {
             stage.setScene(signInOrSignUpScene);   
         });
+        backSignUpButton.setId("button");
         
         Label userCreationMessage = new Label();
         
         Button signUpSceneButton = new Button("Sign up!");
         signUpSceneButton.setPadding(new Insets(10));
+        signUpSceneButton.setId("button");
 
         signUpSceneButton.setOnAction(e-> {
             String login = newLoginInput.getText();
@@ -132,8 +149,11 @@ public class TetrisUi extends Application {
                 try {
                     if (this.tetrisService.createUser(login, name)) {
                         userCreationMessage.setText("");
-                        signInOrSignUpSceneMessage.setText("New user successfully created!");
-                        signInOrSignUpSceneMessage.setTextFill(Color.GREEN);
+                        newLoginInput.setText("");
+                        firstPageLabel.setText("New user successfully created!");
+                        firstPageLabel.setTextFill(Color.GREEN);
+                        newNameInput.setText("");
+                        
                         stage.setScene(signInOrSignUpScene);
                     } else {
                         userCreationMessage.setText("This login is already taken!");        
@@ -147,38 +167,78 @@ public class TetrisUi extends Application {
         
         newUserPane.getChildren().addAll(userCreationMessage, newUsernamePane, 
                 newNamePane, signUpSceneButton, backSignUpButton); 
-        newUserPane.setId("pane");
+        newUserPane.setAlignment(Pos.CENTER);
+        newUserPane.setId("basic");
         signUpScene = new Scene(newUserPane, 385, 770);
         signUpScene.getStylesheets().add("file:style.css");
         
         // signInScene
         
+        // for personalScene
+        Label oldGamesLabel = new Label();
+        Label bestGame1 = new Label();
+        Label bestGame2 = new Label();
+        Label bestGame3 = new Label();
+        VBox listOfGames = new VBox();
+        // end
+        
         VBox signInPane = new VBox(10);
         signInPane.setPadding(new Insets(10));
         TextField loginSignIn = new TextField();
+        loginSignIn.setId("textfield");
         Label labelSignIn = new Label("Your login: ");
-        labelSignIn.setPrefWidth(100);
+        labelSignIn.setId("label");
         Button signInSceneButton = new Button("Sign In!");
-        signInSceneButton.setPadding(new Insets(10));
+        signInSceneButton.setId("button");
+//        signInSceneButton.setPadding(new Insets(10));
         Button backSignInButton = new Button("Back");
-        backSignInButton.setPadding(new Insets(10));
+        backSignInButton.setId("button");
+//        backSignInButton.setPadding(new Insets(10));
         Label signInSceneMessage = new Label();
+        signInSceneMessage.setId("label");
+        
+        HBox loginSignInPane = new HBox(10);
+        loginSignInPane.getChildren().addAll(labelSignIn, loginSignIn); 
+        loginSignInPane.setAlignment(Pos.CENTER);
+        loginSignInPane.setPadding(new Insets(0, 50, 50, 50));
+        
+        labelSignIn.setPrefWidth(100);
+        
         
         backSignInButton.setOnAction(e-> {
             stage.setScene(signInOrSignUpScene);   
         });
         
         Label welcomePersonalSceneLabel = new Label("Oops, you are not signed in!");
+        welcomePersonalSceneLabel.setId("label");
         
         signInSceneButton.setOnAction(e-> {
             String login = loginSignIn.getText();
    
             try {
-                if (this.tetrisService.userSignIn(login)) {
-                    this.signedIn = this.tetrisService.getSignedInUser();
-                    welcomePersonalSceneLabel.setText("Welcome " + this.signedIn.getName() + "!");
+                if (this.tetrisService.userWithThatLoginFound(login)) {
+                    welcomePersonalSceneLabel.setText("Welcome " + this.tetrisService.getSignedInUser().getName() + "!");
+                            // the next lines checks if there any saved old games. If so, 3 best are showed.
+                            // Start:
+                            
+                            oldGamesLabel.setText("Your best games:");
+                            List<OldGame> oldGamesList = this.tetrisService.getUsersOldGames();
+                            if(oldGamesList.isEmpty()) {
+                                oldGamesLabel.setText("");
+                            } else {
+                                bestGame1.setText(oldGamesList.get(0).toString());
+                                if (oldGamesList.size() > 2) {
+                                    bestGame2.setText(oldGamesList.get(1).toString());
+                                    bestGame3.setText(oldGamesList.get(2).toString());
+                                } else {
+                                    bestGame2.setText(oldGamesList.get(1).toString());
+                                }
+                            }
+
+                            // End.
                     stage.setScene(personalScene);
                 } else {
+                    loginSignIn.setText("");
                     signInSceneMessage.setText("Wrong login!");
                     signInSceneMessage.setTextFill(Color.RED);
                     
@@ -189,10 +249,11 @@ public class TetrisUi extends Application {
  
         });  
         
-        signInPane.getChildren().addAll(signInSceneMessage, labelSignIn, loginSignIn, 
+        signInPane.getChildren().addAll(signInSceneMessage, loginSignInPane, 
                 signInSceneButton, backSignInButton); 
-        
+        signInPane.setId("basic");
         signInScene = new Scene(signInPane, 385, 770);
+        signInScene.getStylesheets().add("file:style.css");
         
         // personalScene
         
@@ -201,50 +262,45 @@ public class TetrisUi extends Application {
 
         Button newGameButton = new Button("New game!");
         newGameButton.setPadding(new Insets(10));
-        Label oldGamesLabel = new Label("Your best games: ");
+
+        
+
+        
+        listOfGames.getChildren().addAll(bestGame1, bestGame2, bestGame3);
         
         boolean gameStarted = false;
         
+        Label gameOverMessage = new Label("Game Over!");
         
-        
-//        AnimationTimer timer = new GameTimer();
-        
+        // New game's starting: 
+        // Start: 
         newGameButton.setOnAction(e-> {
             Canvas gameField = new Canvas(420, 770);
             
-            Game gamee = new Game();
-            int height = gamee.getHeigth() - 4;
-            int lenght = gamee.getLength();
-            int[][] a = gamee.visible();
-            System.out.println(lenght);
-            System.out.println(height);
-            System.out.println(a);
-            
-            
-            
+            Game game = new Game();
+            int height = game.getHeigth() - 4;
+            int lenght = game.getLength();
+            int[][] a = game.visible();
+
             GraphicsContext gc = gameField.getGraphicsContext2D();
-           
             gc.setFill(Color.BLACK);
-           
 
             BorderPane asettelu = new BorderPane();
             asettelu.setCenter(gameField);
-
+            
             new AnimationTimer() {
                 long edellinen = 0;
                                
                 @Override
                 public void handle(long now) {
-                    if (now - edellinen < (long) 500000000) {
+                    if (now - edellinen <  ( (long) 500000000 )) {
                         return;
                     }
-                    
-                    
 
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < lenght; x++) {
-                            if (gamee.visible()[x][y] == 1) {
-                                gc.setFill(Color.BLACK);
+                            if (game.visible()[x][y] == 1) {
+                                gc.setFill(Color.web("#585858"));
                                 gc.fillRect(x * 35, y * 35, 35, 35);
                             } else {
                                 gc.setFill(Color.WHITE);
@@ -252,32 +308,40 @@ public class TetrisUi extends Application {
                             }
                         }
                     }
-                    if ( gamee.update() ) {
-                        game.setOnKeyPressed(e -> {
-                            if (e.getCode() == KeyCode.RIGHT) {
-                                gamee.makeMove(1);
-                            } else if (e.getCode() == KeyCode.LEFT) {
-                                gamee.makeMove(2);
-                            } else if (e.getCode() == KeyCode.DOWN) {
-                                gamee.makeMove(3);
-                            } else if (e.getCode() == KeyCode.UP) {
-                                gamee.rotate();
+                    if ( game.update() ) {
+                        gameScene.setOnKeyPressed(e -> {
+                            if (e.getCode() == KeyCode.SPACE) {
+                                game.makeMove(3);
+                            } else {
+                                if (e.getCode() == KeyCode.RIGHT) {
+                                    game.makeMove(1);
+                                } else if (e.getCode() == KeyCode.LEFT) {
+                                    game.makeMove(2);
+                                } 
+//                                else if (e.getCode() == KeyCode.SPACE) {
+//                                    game.makeMove(3);
+//
+//                                } 
+                                else if (e.getCode() == KeyCode.UP) {
+                                    game.rotate();
+                                } else if (e.getCode() == KeyCode.DOWN) {
+                                    game.update();
+                                }  
                             }
-                            gamee.update();
                             for (int y = 0; y < height; y++) {
-                                for (int x = 0; x < lenght; x++) {
-                                    if (gamee.visible()[x][y] == 1) {
-                                        gc.setFill(Color.BLACK);
-                                        gc.fillRect(x * 35, y * 35, 35, 35);
-                                    } else {
-                                        gc.setFill(Color.WHITE);
-                                        gc.fillRect(x * 35, y * 35, 35, 35);
+                                    for (int x = 0; x < lenght; x++) {
+                                        if (game.visible()[x][y] == 1) {
+                                            gc.setFill(Color.web("#585858"));
+                                            gc.fillRect(x * 35, y * 35, 35, 35);
+                                        } else {
+                                            gc.setFill(Color.WHITE);
+                                            gc.fillRect(x * 35, y * 35, 35, 35);
+                                        }
                                     }
                                 }
-                            }
                         });
                     } else {
-                        System.out.println("Going to gameOverScene!");
+                        gameOverMessage.setText("Game over! Your score is " + game.getPoints() + " .");
                         stage.setScene(gameOverScene);
                         this.stop();
                     }
@@ -286,15 +350,15 @@ public class TetrisUi extends Application {
                 
             }.start();
 
-            game = new Scene(asettelu, 385, 770);
+            gameScene = new Scene(asettelu, 385, 770);
 
-            stage.setScene(game);
+            stage.setScene(gameScene);
             stage.show();
 
         });
       
         personalScenePane.getChildren().addAll(welcomePersonalSceneLabel,  
-                newGameButton, oldGamesLabel); 
+                newGameButton, oldGamesLabel, listOfGames); 
         
         personalScene = new Scene(personalScenePane, 385, 770);
         
@@ -305,17 +369,50 @@ public class TetrisUi extends Application {
         gameOverPane.setPadding(new Insets(20));
         gameOverPane.setSpacing(30);
         gameOverPane.setAlignment(Pos.CENTER);
-        Label gameOverMessage = new Label("Game Over!");
+        Label gameSavedLabel = new Label();
 
         
-        Button backToPersonalPageButton = new Button("Back!");
+        Button backToPersonalPageButton = new Button("Back");
+        Button saveThisScoreButton = new Button("Save this score");
                
         backToPersonalPageButton.setOnAction(e-> {
+            gameSavedLabel.setText("");
             stage.setScene(personalScene);   
-        }); 
+        });
+
+        saveThisScoreButton.setOnAction(e-> {
+            gameSavedLabel.setText("Saved!");
+            int points = 0;
+            String message = gameOverMessage.getText();
+            points = Integer.parseInt(message.split(" ")[5]);
+            try {
+                this.tetrisService.addAnOldGame(points);
+
+            } catch (SQLException ex) {
+                Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            // the next lines checks if there any saved old games. If so, 3 best are showed.
+            // Start:
+            List<OldGame> oldGamesList;
+            try {
+                oldGamesLabel.setText("Your best games:");
+                oldGamesList = this.tetrisService.getUsersOldGames();
+                bestGame1.setText(oldGamesList.get(0).toString());
+                if (oldGamesList.size() > 2) {
+                    bestGame2.setText(oldGamesList.get(1).toString());
+                    bestGame3.setText(oldGamesList.get(2).toString());
+                } else if (oldGamesList.size() == 2){
+                    bestGame2.setText(oldGamesList.get(1).toString());
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // End.
+        });
         
         
-        gameOverPane.getChildren().addAll(gameOverMessage, backToPersonalPageButton);       
+        gameOverPane.getChildren().addAll(gameOverMessage, backToPersonalPageButton, saveThisScoreButton, gameSavedLabel);       
         
         gameOverScene = new Scene(gameOverPane, 385, 770);    
 

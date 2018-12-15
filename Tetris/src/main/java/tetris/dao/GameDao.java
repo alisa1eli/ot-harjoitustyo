@@ -27,12 +27,12 @@ public class GameDao implements Dao<OldGame, Integer> {
         this.db = db;
     } 
     
-    public List<OldGame> findAllGamesOfOneUser(String key) throws SQLException {
+    public ArrayList<OldGame> findAllGamesOfOneUser(String key) throws SQLException {
         Connection connection = db.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Game WHERE userId = ?");
         stmt.setObject(1, key);
         
-        List<OldGame> games = new ArrayList<OldGame>();
+        ArrayList<OldGame> games = new ArrayList<OldGame>();
         
         ResultSet rs = stmt.executeQuery();
         

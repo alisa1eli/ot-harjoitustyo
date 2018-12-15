@@ -8,12 +8,34 @@ and open the template in the editor.
     Author     : alisaelizarova
 */
 
+    @font-face {
+        font-family: 'RobotoSlab';
+        src: url('RobotoSlab-Thin.ttf');
+    }
 
-
-    #pane{
-        -fx-background-image: url("background-image.jpg");
-        -fx-background-repeat: stretch;   
+    #basic{
+        -fx-background-color: #585858; 
         -fx-background-size: 385 770;
         -fx-background-position: center center;
+        -fx-font-family: "RobotoSlab";
+        -fx-alignment: center;
+    }
+    #button {
+        -fx-background-color:#ffffff;
+        -fx-font-family: "Helvetica";
+        -fx-background-radius: 0;
+        -fx-padding: 10;
+        -fx-pref-width: 150px;
+    }
+    #button:hover {
+        -fx-background-color:#f7f3f3;
+    }
+    #label {
+        -fx-text-fill:#ffffff;
+        -fx-font-family: "Helvetica";
+    }
+    #textfield {
+        -fx-background-radius: 0;
+        -fx-font-family: "Helvetica";
     }
 

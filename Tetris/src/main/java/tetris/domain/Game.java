@@ -17,6 +17,7 @@ public class Game {
     int[] colums;
     int type;
     int[][] movingPart;
+    int points;
     
     
     public Game() {
@@ -29,6 +30,7 @@ public class Game {
         this.type = 1;
         this.movingPart = new int[4][2];
         this.addNewFigure(1);
+        this.points = 0;
         
     }
     public void setMovingPartPosition(int row, int x, int y, int xDelete, int yDelete) {
@@ -37,6 +39,10 @@ public class Game {
         this.movingPart[row][1] = y;
         this.field[xDelete][yDelete] = 0;
         this.field[x][y] = 1;
+    }
+    
+    public int getPoints() {
+        return this.points;
     }
     
     public int getType() {
@@ -87,11 +93,15 @@ public class Game {
         updateType1();
         updateType2();
         updateType6();
+        updateType8();
+        updateType9();
         
-        this.aRowIsFull();
+
         if (Arrays.deepToString(this.movingPart).equals(beforeUpdate)) {
+            this.aRowIsFull();
             Random random = new Random();
-            this.type = random.nextInt(7 - 1 + 1) + 1;
+            this.type = random.nextInt(9 - 1 + 1) + 1;
+//            this.type = 7;
             if (this.gameover()) {
                 return false;
             }
@@ -108,9 +118,6 @@ public class Game {
             for (int x = 0; x < 4; x++) {
                 if (this.movingPart[x][0] != -1 && this.movingPart[x][1] != -1) {
                     if (this.roomUnder(movingPart[x][0], movingPart[x][1])) {
-                        System.out.println("updated by type 1!");
-//                        this.field[movingPart[x][0]][movingPart[x][1]] = 0;
-//                        this.field[movingPart[x][0]][movingPart[x][1] + 1] = 1;
                         this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     }
                 } else {
@@ -138,8 +145,6 @@ public class Game {
             if (a == b) {
                 for (int x = 0; x < 4; x++) {
                     if (this.movingPart[x][0] != -1) {
-//                        this.field[movingPart[x][0]][movingPart[x][1]] = 0;
-//                        this.field[movingPart[x][0]][movingPart[x][1] + 1] = 1;
                         this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     } 
                 }
@@ -176,6 +181,38 @@ public class Game {
         }
         
     }
+    private void updateType8() {
+        if (this.movingPart[3][1] == 25) {
+            return;
+        }
+        if (this.type == 8 ) {
+            if (this.field[this.movingPart[1][0]][this.movingPart[1][1] + 1] == 0 && 
+                    this.field[this.movingPart[3][0]][this.movingPart[3][1] + 1] == 0) {
+                for (int x = 3; x >= 0; x--) {
+                    if (this.movingPart[x][0] != -1) {
+                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                    } 
+                }
+            }
+        }
+        
+    }
+    private void updateType9() {
+        if (this.movingPart[3][1] == 25) {
+            return;
+        }
+        if (this.type == 9 ) {
+            if (this.field[this.movingPart[0][0]][this.movingPart[0][1] + 1] == 0 && 
+                    this.field[this.movingPart[3][0]][this.movingPart[3][1] + 1] == 0) {
+                for (int x = 3; x >= 0; x--) {
+                    if (this.movingPart[x][0] != -1) {
+                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                    } 
+                }
+            }
+        }
+        
+    }
     
     /**
      * This method checks if there are any rows full of blocks. 
@@ -192,12 +229,10 @@ public class Game {
                 }
             }
             if (sum == 11) {
-                for (int x = 0; x < this.length; x++) {
-                    this.field[x][y] = 0;
-                }
-                this.moveAllRowsDownAboveRowY(y);
+                this.points++;
+                this.removeRowYAndMoveAllRowsDown(y);
+                y--;
             }
-
             sum = 0;
         }
         
@@ -209,13 +244,14 @@ public class Game {
      * 
      * @param y a full row needed to be deleted 
      */
-    public void moveAllRowsDownAboveRowY(int y) {
-        System.out.println("Great method started!");
+    public void removeRowYAndMoveAllRowsDown(int y) {
+        for (int x = 0; x < this.length; x++) {
+            this.field[x][y] = 0;
+        }
         while (y - 1 > 4) {
             int blocks = 0;
             for (int x = 0; x < 11 ; x++) {
-                System.out.println(this.matrixToString(this.movingPart));
-                if (this.field[x][y - 1] == 1 || this.matrixToString(this.movingPart).contains(x + " " + (y - 1))) {
+                if (this.field[x][y - 1] == 1) {
                     blocks++;
                     this.field[x][y] = 1;
                     this.field[x][y - 1] = 0;
@@ -231,7 +267,7 @@ public class Game {
     /**
      * This method return the part of game field that is visible for a user. 
      * 
-     * @return game field (int[11][22]) 
+     * @return game field (Integer[11][22]) 
      */
     public int[][] visible() {
         int[][] v = new int[11][22];
@@ -250,69 +286,12 @@ public class Game {
      */
     public void addNewFigure(int number) {
         this.type = number;
-        this.setAllTheSameValue(this.movingPart, -1);
-        if (number == 1) {
-            this.field[5][4] = 1;
-            this.movingPart[0][0] = 5;
-            this.movingPart[0][1] = 4;
+        this.movingPart = this.getCurentTypeOfFigure();
+        for (int x = 0; x < 4; x++) {
+            if (this.movingPart[x][0] != -1) {
+                this.field[this.movingPart[x][0]][this.movingPart[x][1]] = 1;
+            }
         }
-        if (number == 2) {
-            this.field[5][4] = 1;
-            this.field[6][4] = 1;
-            this.movingPart[0][0] = 5;
-            this.movingPart[0][1] = 4;
-            this.movingPart[1][0] = 6;
-            this.movingPart[1][1] = 4;
-        }
-        if (number == 3) {
-            this.field[5][4] = 1;
-            this.field[6][4] = 1;
-            this.field[7][4] = 1;
-            this.movingPart[0][0] = 5;
-            this.movingPart[0][1] = 4;
-            this.movingPart[1][0] = 6;
-            this.movingPart[1][1] = 4;
-            this.movingPart[2][0] = 7;
-            this.movingPart[2][1] = 4;
-        }
-        if (number == 4) {
-            this.field[5][4] = 1;
-            this.field[5][3] = 1;
-            this.movingPart[0][0] = 5;
-            this.movingPart[0][1] = 4;
-            this.movingPart[1][0] = 5;
-            this.movingPart[1][1] = 3;
-        } else if (number == 5) {
-            this.field[5][4] = 1;
-            this.field[5][3] = 1;
-            this.field[5][2] = 1;
-            this.movingPart[0][0] = 5;
-            this.movingPart[0][1] = 4;
-            this.movingPart[1][0] = 5;
-            this.movingPart[1][1] = 3;
-            this.movingPart[2][0] = 5;
-            this.movingPart[2][1] = 2;
-        } else if (number == 6) {
-            this.field[5][4] = 1;
-            this.field[6][4] = 1;
-            this.field[5][3] = 1;
-            this.movingPart[0][0] = 5;
-            this.movingPart[0][1] = 4;
-            this.movingPart[1][0] = 6;
-            this.movingPart[1][1] = 4;
-            this.movingPart[3][0] = 5;
-            this.movingPart[3][1] = 3;
-        } else if (number == 7) {
-            this.field[4][4] = 1;
-            this.field[5][4] = 1;
-            this.field[5][3] = 1;
-            this.movingPart[0][0] = 4;
-            this.movingPart[0][1] = 4;
-            this.movingPart[1][0] = 5;
-            this.movingPart[1][1] = 4;
-            this.movingPart[3][0] = 5;
-            this.movingPart[3][1] = 3;
-        } 
     }
     
     /**
@@ -331,26 +310,6 @@ public class Game {
         return m;
     }
     
-//    public boolean onTheBottom() {
-//        int[][] p = this.getPosition();
-//        int a = 0;
-//        int b = 0;
-//        if (p[0][0] == -1) {
-//            return true;
-//        }
-//        for (int x = 0; x < 4; x++) {
-//            if (p[x][0] != -1) {
-//                a++;
-//                if (this.roomUnder(p[x][0], p[x][1])) {
-//                    b++;
-//                }
-//            }
-//        }
-//        if (a == b) {
-//            return false;
-//        }
-//        return true;
-//    }
     
     /**
      * This method checks if there is room under a block  
@@ -360,7 +319,6 @@ public class Game {
      * @return TRUE if there some room, FALSE otherwise.
      */
     public boolean roomUnder(int x, int y) {
-        System.out.println("x: " + x + " y: " + y);
         if (y == 25) {
             return false;
         } else if (this.field[x][y + 1] == 0) {
@@ -426,7 +384,7 @@ public class Game {
             toCheck[1][1] = this.movingPart[1][1];
             toCheck[2][0] = this.movingPart[2][0];
             toCheck[2][1] = this.movingPart[2][1];
-        } else if (this.type == 6 || this.type == 7) {
+        } else if (this.type == 6 || this.type == 7 || this.type == 8 || this.type == 9) {
             toCheck[0][0] = this.movingPart[3][0];
             toCheck[0][1] = this.movingPart[3][1];
             toCheck[1][0] = this.movingPart[1][0];
@@ -467,7 +425,7 @@ public class Game {
             toCheck[1][1] = this.movingPart[1][1];
             toCheck[2][0] = this.movingPart[2][0];
             toCheck[2][1] = this.movingPart[2][1];
-        } else if (this.type == 6 || this.type == 7) {
+        } else if (this.type == 6 || this.type == 7 || this.type == 8 || this.type == 9) {
             toCheck[0][0] = this.movingPart[3][0];
             toCheck[0][1] = this.movingPart[3][1];
             toCheck[1][0] = this.movingPart[0][0];
@@ -504,6 +462,16 @@ public class Game {
         } else if (this.type == 4 || this.type == 5) {
             toCheck[0][0] = this.movingPart[0][0];
             toCheck[0][1] = this.movingPart[0][1];
+        } else if (this.type == 8) {
+            toCheck[0][0] = this.movingPart[3][0];
+            toCheck[0][1] = this.movingPart[3][1];
+            toCheck[1][0] = this.movingPart[1][0];
+            toCheck[1][1] = this.movingPart[1][1];
+        } else if (this.type == 9) {
+            toCheck[0][0] = this.movingPart[3][0];
+            toCheck[0][1] = this.movingPart[3][1];
+            toCheck[1][0] = this.movingPart[0][0];
+            toCheck[1][1] = this.movingPart[0][1];
         }
         int d = 0;                                                              // d says how many blocks we chould take our figure down.
         while (true) {
@@ -535,7 +503,6 @@ public class Game {
      * This method rotates the figure if it's possible. 
      */
     public void rotate() {
-        // works only for types 1, 2, 3 4, 5
         if (this.type == 1) {
             return;
         } else if (this.type == 2) {
@@ -544,56 +511,66 @@ public class Game {
                 this.setMovingPartPosition(1, this.movingPart[0][0], this.movingPart[0][1] - 1, this.movingPart[1][0], this.movingPart[1][1]);
             }
         } else if (this.type == 3) {
+            if (this.movingPart[1][1] == this.heigth - 1) {
+                return;
+            }
             if (this.field[this.movingPart[1][0]][this.movingPart[1][1] + 1] == 0 && this.field[this.movingPart[1][0]][this.movingPart[1][1] - 1] == 0) {
                 this.type = 5;
                 this.setMovingPartPosition(0, this.movingPart[1][0], this.movingPart[1][1] + 1, this.movingPart[0][0], this.movingPart[0][1]);
                 this.setMovingPartPosition(2, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[2][0], this.movingPart[2][1]);
             }
         } else if (this.type == 4) {
+            if(this.movingPart[0][0] == this.length - 1) {
+                return;
+            }
             if (this.field[this.movingPart[0][0] + 1][this.movingPart[0][1]] == 0) {
                 this.type = 2;
                 this.setMovingPartPosition(1, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[1][0], this.movingPart[1][1]);
             }
         } else if (this.type == 5) {
+            if (this.movingPart[1][0] == 0 || this.movingPart[1][0] == this.length - 1) {
+                return;
+            }
             if (this.field[this.movingPart[1][0] - 1][this.movingPart[1][1]] == 0 && this.field[this.movingPart[1][0] + 1][this.movingPart[1][1]] == 0) {
                 this.type = 3;
                 this.setMovingPartPosition(0, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[0][0], this.movingPart[0][1]);
                 this.setMovingPartPosition(2, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[2][0], this.movingPart[2][1]);
             }
+        } else if (this.type == 6) {
+            if (this.movingPart[0][1] == this.length - 1 ) {
+                return;
+            }
+            if (this.field[this.movingPart[0][0]][this.movingPart[0][1] + 1] == 0) {
+                this.type = 8;
+                this.setMovingPartPosition(3, this.movingPart[0][0], this.movingPart[0][1] + 1, this.movingPart[3][0], this.movingPart[3][1]);
+            }
+        } else if (this.type == 8) {
+            if (this.movingPart[0][0] == 0 ) {
+                return;
+            }
+            if (this.field[this.movingPart[0][0] - 1][this.movingPart[0][1]] == 0) {
+                this.type = 9;
+                this.setMovingPartPosition(0, this.movingPart[0][0] - 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
+                this.setMovingPartPosition(1, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
+            }
+        } else if (this.type == 9) {
+            if (this.field[this.movingPart[1][0]][this.movingPart[1][1] - 1] == 0) {
+                this.type = 7;
+                this.setMovingPartPosition(3, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[3][0], this.movingPart[3][1]);
+            }
+        } else if (this.type == 7) {
+            if (this.movingPart[1][0] == this.length - 1) {
+                return;
+            }
+            if (this.field[this.movingPart[1][0] + 1][this.movingPart[0][1]] == 0) {
+                this.type = 6;
+                this.setMovingPartPosition(1, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
+                this.setMovingPartPosition(0, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
+
+            }
         }
     }
      
-//    public int[][] getPosition() {
-//        int r[][] = {{-1, -1, -1, -1}, {-1, -1, -1, -1}};
-//        int rX = 0;
-//        boolean moving = false;
-//        this.printMatrix(r);
-//        for (int y = 0; y < this.heigth - 1; y++) {
-//            for (int x = 0; x < this.length; x++) {
-//                if (this.field[x][y] == 1) {
-//                    System.out.println(x + "," + y);
-//                    r[0][rX] = x;
-//                    r[1][rX] = y;
-//                    this.printMatrix(r);
-//                    rX++;
-//                }
-//                if (this.roomUnder(x, y)) {
-//                    moving = true;
-//                }
-//                if (rX == this.type) {
-//                    break;
-//                }
-//            }
-//        }
-////        this.printMatrix(r);
-//        if (moving) {
-//            return r;
-//        }
-//        int[][] a = {{-1, -1, -1, -1}, {-1, -1, -1, -1}};
-//        return a;
-//        
-//    }
-
     /**
      * This method informs if the game is over or not. 
      * It decides it based on if there is a room for the following figure.
@@ -601,21 +578,12 @@ public class Game {
      * @return TRUE if the game is over, FALSE otherwise.
      */
     public boolean gameover() {
-        if (this.type == 1 || this.type == 4 || this.type == 5) {
-            if (this.field[5][4] == 1) {
-                return true;
-            }
-        } else if (this.type == 6 || this.type == 2) {
-            if (this.field[5][4] == 1 || this.field[6][4] == 1) {
-                return true;
-            }
-        } else if (this.type == 7) {
-            if (this.field[4][4] == 1 || this.field[5][4] == 1) {
-                return true;
-            }
-        } else if (this.type == 3) {
-            if (this.field[6][4] == 1 || this.field[5][4] == 1 || this.field[7][4] == 1) {
-                return true;
+        int[][] a = this.getCurentTypeOfFigure();
+        for (int x = 0; x < 4; x++) {
+            if (a[x][0] != -1) {
+                if (this.field[a[x][0]][a[x][1]] != 0 ) {
+                    return true;
+                }
             }
         } 
         return false;
@@ -648,5 +616,68 @@ public class Game {
             }
         }
         return dst;
+    }
+    private int[][] getCurentTypeOfFigure() {
+        int[][] a = new int[4][2];
+        this.setAllTheSameValue(a, -1);
+        if (this.type == 1) {
+            a[0][0] = 5;
+            a[0][1] = 4;
+        } else if (this.type == 2) {
+            a[0][0] = 5;
+            a[0][1] = 4;
+            a[1][0] = 6;
+            a[1][1] = 4;
+        }
+        if (this.type == 3) {
+            a[0][0] = 5;
+            a[0][1] = 4;
+            a[1][0] = 6;
+            a[1][1] = 4;
+            a[2][0] = 7;
+            a[2][1] = 4;
+        }
+        if (this.type == 4) {
+            a[0][0] = 5;
+            a[0][1] = 4;
+            a[1][0] = 5;
+            a[1][1] = 3;
+        } else if (this.type == 5) {
+            a[0][0] = 5;
+            a[0][1] = 4;
+            a[1][0] = 5;
+            a[1][1] = 3;
+            a[2][0] = 5;
+            a[2][1] = 2;
+        } else if (this.type == 6) {
+            a[0][0] = 5;
+            a[0][1] = 4;
+            a[1][0] = 6;
+            a[1][1] = 4;
+            a[3][0] = 5;
+            a[3][1] = 3;
+        } else if (this.type == 7) {
+            a[0][0] = 4;
+            a[0][1] = 4;
+            a[1][0] = 5;
+            a[1][1] = 4;
+            a[3][0] = 5;
+            a[3][1] = 3;
+        } else if (this.type == 8) {
+            a[0][0] = 5;
+            a[0][1] = 3;
+            a[1][0] = 6;
+            a[1][1] = 3;
+            a[3][0] = 5;
+            a[3][1] = 4;
+        } else if (this.type == 9) {
+            a[0][0] = 4;
+            a[0][1] = 3;
+            a[1][0] = 5;
+            a[1][1] = 3;
+            a[3][0] = 5;
+            a[3][1] = 4;
+        }
+        return a;
     }
 }

@@ -27,16 +27,16 @@ public class UserTest {
        this.user = new User("User", "Password");
     }
 
-    @Test 
-    public void anOldGameCanBeAdded() {
-        this.user.addAnOldGame(120);
-        assertTrue(1 == this.user.getOldGames().size());
-    }
-    @Test
-    public void whenAnOldGameAddedTheScoreSavedCorrectly() {
-        this.user.addAnOldGame(120);
-        assertTrue(120 == this.user.getOldGames().get(0).getScore());
-    }
+//    @Test 
+//    public void anOldGameCanBeAdded() {
+//        this.user.addAnOldGame(120);
+//        assertTrue(1 == this.user.getOldGames().size());
+//    }
+//    @Test
+//    public void whenAnOldGameAddedTheScoreSavedCorrectly() {
+//        this.user.addAnOldGame(120);
+//        assertTrue(120 == this.user.getOldGames().get(0).getScore());
+//    }
 //    @Test 
 //    public void userCanDeleteAnOldGameWithItsId() {
 //        this.user.addAnOldGame(120);
