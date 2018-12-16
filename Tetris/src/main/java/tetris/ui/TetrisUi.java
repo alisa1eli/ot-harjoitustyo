@@ -176,10 +176,17 @@ public class TetrisUi extends Application {
         
         // for personalScene
         Label oldGamesLabel = new Label();
+        oldGamesLabel.setPadding(new Insets(10));
+        oldGamesLabel.setId("label");
         Label bestGame1 = new Label();
+        bestGame1.setId("label");
         Label bestGame2 = new Label();
+        bestGame2.setId("label");
         Label bestGame3 = new Label();
-        VBox listOfGames = new VBox();
+        bestGame3.setId("label");
+        VBox listOfGames = new VBox(10);
+        listOfGames.setAlignment(Pos.CENTER);
+        listOfGames.setPadding(new Insets(0, 0, 50, 0));
         // end
         
         VBox signInPane = new VBox(10);
@@ -214,10 +221,10 @@ public class TetrisUi extends Application {
         
         signInSceneButton.setOnAction(e-> {
             String login = loginSignIn.getText();
-   
             try {
                 if (this.tetrisService.userWithThatLoginFound(login)) {
                     welcomePersonalSceneLabel.setText("Welcome " + this.tetrisService.getSignedInUser().getName() + "!");
+                    loginSignIn.setText("");
                             // the next lines checks if there any saved old games. If so, 3 best are showed.
                             // Start:
                             
@@ -238,7 +245,6 @@ public class TetrisUi extends Application {
                             // End.
                     stage.setScene(personalScene);
                 } else {
-                    loginSignIn.setText("");
                     signInSceneMessage.setText("Wrong login!");
                     signInSceneMessage.setTextFill(Color.RED);
                     
@@ -261,16 +267,21 @@ public class TetrisUi extends Application {
         personalScenePane.setPadding(new Insets(10));
 
         Button newGameButton = new Button("New game!");
+        newGameButton.setId("button");
         newGameButton.setPadding(new Insets(10));
 
-        
-
-        
         listOfGames.getChildren().addAll(bestGame1, bestGame2, bestGame3);
         
         boolean gameStarted = false;
         
         Label gameOverMessage = new Label("Game Over!");
+        gameOverMessage.setId("label");
+        
+        Label scoreOfTheGameLabel = new Label("");
+        scoreOfTheGameLabel.setAlignment(Pos.CENTER);
+        scoreOfTheGameLabel.setPrefWidth(385);
+        scoreOfTheGameLabel.setId("scoreLabel");
+        
         
         // New game's starting: 
         // Start: 
@@ -287,32 +298,30 @@ public class TetrisUi extends Application {
 
             BorderPane asettelu = new BorderPane();
             asettelu.setCenter(gameField);
+            asettelu.setTop(scoreOfTheGameLabel);
             
             new AnimationTimer() {
                 long edellinen = 0;
                                
                 @Override
                 public void handle(long now) {
-                    if (now - edellinen <  ( (long) 500000000 - 50000000*(game.getPoints()+1))) {
+                    if (now - edellinen <  ( (long) 500000000 )) {
                         return;
                     }
+                    scoreOfTheGameLabel.setText("Your score: " + game.getPoints());
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < lenght; x++) {
-                            if (game.visible()[x][y] == 1) {
-//                                            gc.setFill(Color.web("#585858"));
-                                            gc.setFill(Color.web("#c57e00"));
-                                            gc.fillRect(x * 35, y * 35, 35, 35);
-                                        } else {
-                                            gc.setFill(Color.WHITE);
-                                            gc.fillRect(x * 35, y * 35, 35, 35);
-                                        }
-//                                Color c = Color.web(game.getColors(x, y));
-//                                gc.setFill(c);
-//                                gc.fillRect(x * 35, y * 35, 35, 35);
-//
-////                                gc.setFill(Color.WHITE);
-////                                gc.fillRect(x * 35, y * 35, 35, 35);
-////                            }
+//                            if (game.visible()[x][y] != 0) {
+//                                            gc.setFill(Color.web("#c57e00"));
+//                                            gc.fillRect(x * 35, y * 35, 35, 35);
+//                                        } else {
+//                                            gc.setFill(Color.WHITE);
+//                                            gc.fillRect(x * 35, y * 35, 35, 35);
+//                                        }
+                                Color c = Color.web(game.getColor(x, y));
+                                gc.setFill(c);
+                                gc.fillRect(x * 35, y * 34, 35, 34);
+
                         }
                     }
                     if ( game.update() ) {
@@ -334,14 +343,17 @@ public class TetrisUi extends Application {
                             }
                             for (int y = 0; y < height; y++) {
                                     for (int x = 0; x < lenght; x++) {
-                                        if (game.visible()[x][y] == 1) {
+//                                        if (game.visible()[x][y] != 0) {
 //                                            gc.setFill(Color.web("#585858"));
-                                            gc.setFill(Color.web("#c57e00"));
-                                            gc.fillRect(x * 35, y * 35, 35, 35);
-                                        } else {
-                                            gc.setFill(Color.WHITE);
-                                            gc.fillRect(x * 35, y * 35, 35, 35);
-                                        }
+//                                            gc.setFill(Color.web("#c57e00"));
+//                                            gc.fillRect(x * 35, y * 35, 35, 35);
+//                                        } else {
+//                                            gc.setFill(Color.WHITE);
+//                                            gc.fillRect(x * 35, y * 35, 35, 35);
+//                                        }
+                                        Color c = Color.web(game.getColor(x, y));
+                                        gc.setFill(c);
+                                        gc.fillRect(x * 35, y * 34, 35, 34);
                                     }
                                 }
                         });
@@ -354,17 +366,26 @@ public class TetrisUi extends Application {
                 }
                 
             }.start();
-
+            
             gameScene = new Scene(asettelu, 385, 770);
-
+            gameScene.getStylesheets().add("file:style.css");
             stage.setScene(gameScene);
             stage.show();
 
         });
-      
+        Button signOutButton = new Button("Sign out");
+
+        signOutButton.setId("button");
+        signOutButton.setOnAction(e-> {
+            this.tetrisService.signOutTheCurrentUser();
+            stage.setScene(this.signInOrSignUpScene);   
+        }); 
+
         personalScenePane.getChildren().addAll(welcomePersonalSceneLabel,  
-                newGameButton, oldGamesLabel, listOfGames); 
-        
+                newGameButton, oldGamesLabel, listOfGames, signOutButton); 
+        personalScenePane.setAlignment(Pos.CENTER);
+        personalScenePane.setId("basic");
+        personalScenePane.getStylesheets().add("file:style.css");
         personalScene = new Scene(personalScenePane, 385, 770);
         
         
@@ -375,10 +396,13 @@ public class TetrisUi extends Application {
         gameOverPane.setSpacing(30);
         gameOverPane.setAlignment(Pos.CENTER);
         Label gameSavedLabel = new Label();
+        gameSavedLabel.setId("label");
 
         
         Button backToPersonalPageButton = new Button("Back");
         Button saveThisScoreButton = new Button("Save this score");
+        backToPersonalPageButton.setId("button");
+        saveThisScoreButton.setId("button");
                
         backToPersonalPageButton.setOnAction(e-> {
             gameSavedLabel.setText("");
@@ -418,8 +442,9 @@ public class TetrisUi extends Application {
         
         
         gameOverPane.getChildren().addAll(gameOverMessage, backToPersonalPageButton, saveThisScoreButton, gameSavedLabel);       
-        
+        gameOverPane.setId("basic");
         gameOverScene = new Scene(gameOverPane, 385, 770);    
+        gameOverScene.getStylesheets().add("file:style.css");
 
         
         stage.setScene(signInOrSignUpScene);

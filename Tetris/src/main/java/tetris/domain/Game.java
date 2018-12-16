@@ -35,12 +35,12 @@ public class Game {
         this.level = new Level();
         
     }
-    public void setMovingPartPosition(int row, int x, int y, int xDelete, int yDelete) {
+    public void setMovingPartPosition(int t, int row, int x, int y, int xDelete, int yDelete) {
 
         this.movingPart[row][0] = x;
         this.movingPart[row][1] = y;
         this.field[xDelete][yDelete] = 0;
-        this.field[x][y] = 1;
+        this.field[x][y] = t;
     }
     
     public int getPoints() {
@@ -98,6 +98,8 @@ public class Game {
         updateType8();
         updateType9();
         
+        this.printMatrix(field);
+
 
         if (Arrays.deepToString(this.movingPart).equals(beforeUpdate)) {
             this.aRowIsFull();
@@ -107,7 +109,10 @@ public class Game {
             if (this.gameover()) {
                 return false;
             }
+            this.printMatrix(field);
+            System.out.println("Adding new figure: ");
             this.addNewFigure(this.type);
+            System.out.println("-----------------------------------------------");
         }
         return true;
     }
@@ -120,7 +125,7 @@ public class Game {
             for (int x = 0; x < 4; x++) {
                 if (this.movingPart[x][0] != -1 && this.movingPart[x][1] != -1) {
                     if (this.roomUnder(movingPart[x][0], movingPart[x][1])) {
-                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     }
                 } else {
                     return;
@@ -147,7 +152,7 @@ public class Game {
             if (a == b) {
                 for (int x = 0; x < 4; x++) {
                     if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     } 
                 }
             }
@@ -172,12 +177,10 @@ public class Game {
             if (a == b) {
                 for (int x = 0; x < 3; x++) {
                     if (this.movingPart[x][0] != -1) {
-//                        this.field[movingPart[x][0]][movingPart[x][1]] = 0;
-//                        this.field[movingPart[x][0]][movingPart[x][1] + 1] = 1;
-                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     } 
                 }
-                this.setMovingPartPosition(3, movingPart[3][0], movingPart[3][1] + 1, movingPart[3][0], movingPart[3][1]);
+                this.setMovingPartPosition(this.type, 3, movingPart[3][0], movingPart[3][1] + 1, movingPart[3][0], movingPart[3][1]);
             }
             
         }
@@ -192,7 +195,7 @@ public class Game {
                     this.field[this.movingPart[3][0]][this.movingPart[3][1] + 1] == 0) {
                 for (int x = 3; x >= 0; x--) {
                     if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     } 
                 }
             }
@@ -208,7 +211,7 @@ public class Game {
                     this.field[this.movingPart[3][0]][this.movingPart[3][1] + 1] == 0) {
                 for (int x = 3; x >= 0; x--) {
                     if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
+                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
                     } 
                 }
             }
@@ -226,7 +229,7 @@ public class Game {
         int sum = 0;
         for (int y = 0; y < this.heigth; y++) {
             for (int x = 0; x < this.length; x++) {
-                if (this.field[x][y] == 1) {
+                if (this.field[x][y] != 0) {
                     sum++;
                 }
             }
@@ -253,9 +256,9 @@ public class Game {
         while (y - 1 > 4) {
             int blocks = 0;
             for (int x = 0; x < 11 ; x++) {
-                if (this.field[x][y - 1] == 1) {
+                if (this.field[x][y - 1] != 0) {
                     blocks++;
-                    this.field[x][y] = 1;
+                    this.field[x][y] = this.field[x][y - 1];
                     this.field[x][y - 1] = 0;
                 }                 
             }
@@ -291,7 +294,7 @@ public class Game {
         this.movingPart = this.getCurentTypeOfFigure();
         for (int x = 0; x < 4; x++) {
             if (this.movingPart[x][0] != -1) {
-                this.field[this.movingPart[x][0]][this.movingPart[x][1]] = 1;
+                this.field[this.movingPart[x][0]][this.movingPart[x][1]] = this.type;
             }
         }
     }
@@ -402,7 +405,7 @@ public class Game {
         }
         for (int x = 3; x >= 0; x--) {
             if (this.movingPart[x][0] != -1) {
-                this.setMovingPartPosition(x, this.movingPart[x][0] + 1, this.movingPart[x][1], this.movingPart[x][0], this.movingPart[x][1]);
+                this.setMovingPartPosition(this.type, x, this.movingPart[x][0] + 1, this.movingPart[x][1], this.movingPart[x][0], this.movingPart[x][1]);
             }
         }
     }    
@@ -443,7 +446,7 @@ public class Game {
         }
         for (int x = 0; x < 4; x++) {
             if (this.movingPart[x][0] != -1) {
-                this.setMovingPartPosition(x, this.movingPart[x][0] - 1, this.movingPart[x][1], this.movingPart[x][0], this.movingPart[x][1]);
+                this.setMovingPartPosition(this.type,x, this.movingPart[x][0] - 1, this.movingPart[x][1], this.movingPart[x][0], this.movingPart[x][1]);
             }
         }
         
@@ -479,10 +482,18 @@ public class Game {
         while (true) {
             for (int x = 0; x < 3; x++) {
                 if (toCheck[x][0] != -1) {
-                    if (this.field[toCheck[x][0]][toCheck[x][1] + d + 1] == 1 ) {                  
-                        for(int xN = 0; xN < 4; xN++) {
-                            if (this.movingPart[xN][0] != -1) {
-                                this.setMovingPartPosition(xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
+                    if (this.field[toCheck[x][0]][toCheck[x][1] + d + 1] != 0 ) {      
+                        if (this.type == 8 || this.type == 9) {
+                            for(int xN = 3; xN >= 0; xN--) {
+                                if (this.movingPart[xN][0] != -1) {
+                                    this.setMovingPartPosition(this.type, xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
+                                }
+                            } 
+                        } else {
+                            for(int xN = 0; xN < 4; xN++) {
+                                if (this.movingPart[xN][0] != -1) {
+                                    this.setMovingPartPosition(this.type, xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
+                                }
                             }
                         }
                         return;
@@ -493,7 +504,7 @@ public class Game {
             if (toCheck[0][1] + d == 25) {
                 for (int xN = 0; xN < 4; xN++) {
                         if (this.movingPart[xN][0] != -1) {
-                            this.setMovingPartPosition(xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
+                            this.setMovingPartPosition(this.type, xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
                         }
                     }
                 return;
@@ -510,7 +521,7 @@ public class Game {
         } else if (this.type == 2) {
             if (this.field[this.movingPart[0][0]][this.movingPart[0][1] - 1] == 0) {
                 this.type = 4;
-                this.setMovingPartPosition(1, this.movingPart[0][0], this.movingPart[0][1] - 1, this.movingPart[1][0], this.movingPart[1][1]);
+                this.setMovingPartPosition(this.type, 1, this.movingPart[0][0], this.movingPart[0][1] - 1, this.movingPart[1][0], this.movingPart[1][1]);
             }
         } else if (this.type == 3) {
             if (this.movingPart[1][1] == this.heigth - 1) {
@@ -518,8 +529,8 @@ public class Game {
             }
             if (this.field[this.movingPart[1][0]][this.movingPart[1][1] + 1] == 0 && this.field[this.movingPart[1][0]][this.movingPart[1][1] - 1] == 0) {
                 this.type = 5;
-                this.setMovingPartPosition(0, this.movingPart[1][0], this.movingPart[1][1] + 1, this.movingPart[0][0], this.movingPart[0][1]);
-                this.setMovingPartPosition(2, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[2][0], this.movingPart[2][1]);
+                this.setMovingPartPosition(this.type, 0, this.movingPart[1][0], this.movingPart[1][1] + 1, this.movingPart[0][0], this.movingPart[0][1]);
+                this.setMovingPartPosition(this.type, 2, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[2][0], this.movingPart[2][1]);
             }
         } else if (this.type == 4) {
             if(this.movingPart[0][0] == this.length - 1) {
@@ -527,7 +538,7 @@ public class Game {
             }
             if (this.field[this.movingPart[0][0] + 1][this.movingPart[0][1]] == 0) {
                 this.type = 2;
-                this.setMovingPartPosition(1, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[1][0], this.movingPart[1][1]);
+                this.setMovingPartPosition(this.type, 1, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[1][0], this.movingPart[1][1]);
             }
         } else if (this.type == 5) {
             if (this.movingPart[1][0] == 0 || this.movingPart[1][0] == this.length - 1) {
@@ -535,8 +546,8 @@ public class Game {
             }
             if (this.field[this.movingPart[1][0] - 1][this.movingPart[1][1]] == 0 && this.field[this.movingPart[1][0] + 1][this.movingPart[1][1]] == 0) {
                 this.type = 3;
-                this.setMovingPartPosition(0, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[0][0], this.movingPart[0][1]);
-                this.setMovingPartPosition(2, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[2][0], this.movingPart[2][1]);
+                this.setMovingPartPosition(this.type, 0, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[0][0], this.movingPart[0][1]);
+                this.setMovingPartPosition(this.type, 2, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[2][0], this.movingPart[2][1]);
             }
         } else if (this.type == 6) {
             if (this.movingPart[0][1] == this.length - 1 ) {
@@ -544,7 +555,7 @@ public class Game {
             }
             if (this.field[this.movingPart[0][0]][this.movingPart[0][1] + 1] == 0) {
                 this.type = 8;
-                this.setMovingPartPosition(3, this.movingPart[0][0], this.movingPart[0][1] + 1, this.movingPart[3][0], this.movingPart[3][1]);
+                this.setMovingPartPosition(this.type, 3, this.movingPart[0][0], this.movingPart[0][1] + 1, this.movingPart[3][0], this.movingPart[3][1]);
             }
         } else if (this.type == 8) {
             if (this.movingPart[0][0] == 0 ) {
@@ -552,13 +563,13 @@ public class Game {
             }
             if (this.field[this.movingPart[0][0] - 1][this.movingPart[0][1]] == 0) {
                 this.type = 9;
-                this.setMovingPartPosition(0, this.movingPart[0][0] - 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
-                this.setMovingPartPosition(1, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
+                this.setMovingPartPosition(this.type, 0, this.movingPart[0][0] - 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
+                this.setMovingPartPosition(this.type, 1, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
             }
         } else if (this.type == 9) {
             if (this.field[this.movingPart[1][0]][this.movingPart[1][1] - 1] == 0) {
                 this.type = 7;
-                this.setMovingPartPosition(3, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[3][0], this.movingPart[3][1]);
+                this.setMovingPartPosition(this.type, 3, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[3][0], this.movingPart[3][1]);
             }
         } else if (this.type == 7) {
             if (this.movingPart[1][0] == this.length - 1) {
@@ -566,8 +577,8 @@ public class Game {
             }
             if (this.field[this.movingPart[1][0] + 1][this.movingPart[0][1]] == 0) {
                 this.type = 6;
-                this.setMovingPartPosition(1, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
-                this.setMovingPartPosition(0, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
+                this.setMovingPartPosition(this.type, 1, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
+                this.setMovingPartPosition(this.type, 0, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
 
             }
         }
@@ -681,5 +692,8 @@ public class Game {
             a[3][1] = 4;
         }
         return a;
+    }
+    public String getColor(int x, int y) {
+        return this.level.getColors()[this.field[x][y + 4]];
     }
 }

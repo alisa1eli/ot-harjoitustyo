@@ -38,4 +38,10 @@ and open the template in the editor.
         -fx-background-radius: 0;
         -fx-font-family: "Helvetica";
     }
+    #scoreLabel {
+        -fx-font-family: "Helvetica";
+        -fx-text-fill:#ffffff;
+        -fx-background-color: #585858;
+        -fx-padding: 3;
+    }
 

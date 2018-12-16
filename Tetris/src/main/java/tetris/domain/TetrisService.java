@@ -111,4 +111,8 @@ public class TetrisService {
         ArrayList<OldGame> r = this.signedIn.getOldGamesSortedByScore();
         return r;
     }
+
+    public void signOutTheCurrentUser() {
+        this.signedIn = null;
+    }
 }

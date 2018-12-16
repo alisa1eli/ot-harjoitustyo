@@ -44,10 +44,10 @@ public class Database {
         ArrayList<String> lista = new ArrayList<>();
 
         // to create a database
-        lista.add("CREATE TABLE User ( "
+        lista.add("CREATE TABLE IF NOT EXISTS User ( "
                 + "id varchar(255) PRIMARY KEY, "
                 + "name varchar(255) ); ");
-        lista.add("CREATE TABLE Game(id integer PRIMARY KEY, userId varchar(255), "
+        lista.add("CREATE TABLE IF NOT EXISTS Game(id integer PRIMARY KEY, userId varchar(255), "
                 + "date varchar(30), score integer, "
                 + "FOREIGN KEY(userId) REFERENCES User(id));");
         
