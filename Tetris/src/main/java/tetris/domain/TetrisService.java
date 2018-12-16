@@ -26,11 +26,18 @@ public class TetrisService {
         this.userDao = userDao;
         this.gameDao = gameDao;
         this.signedIn = null;
-        this.game = new Game();
-        this.gameStarted = false;
+//        this.game = new Game();
+//        this.gameStarted = false;
         
     }
     
+    /**
+    * This method checks if the user with the login is in the db
+    * 
+    * @param   login   (String) - unique
+    * 
+    * @return true if the user is found, otherwise false 
+    */ 
     public boolean userWithThatLoginFound(String login) throws SQLException { 
         this.signedIn = userDao.findOne(login);
         if (this.signedIn != null) {
@@ -72,12 +79,12 @@ public class TetrisService {
     public boolean gameStarted() {
         return this.gameStarted;
     }
-    public void setGameStart() {
-        this.gameStarted = true;
-    }
-    public Game getGame() {
-        return this.game;
-    }
+//    public void setGameStart() {
+//        this.gameStarted = true;
+//    }
+//    public Game getGame() {
+//        return this.game;
+//    }
     public int[][] getVisible() {
         return this.game.visible();
     }

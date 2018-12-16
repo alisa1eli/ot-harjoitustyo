@@ -17,6 +17,7 @@ public class Game {
     int[] colums;
     int type;
     int[][] movingPart;
+    Level level;
     int points;
     
     
@@ -31,6 +32,7 @@ public class Game {
         this.movingPart = new int[4][2];
         this.addNewFigure(1);
         this.points = 0;
+        this.level = new Level();
         
     }
     public void setMovingPartPosition(int row, int x, int y, int xDelete, int yDelete) {
@@ -42,7 +44,7 @@ public class Game {
     }
     
     public int getPoints() {
-        return this.points;
+        return this.level.getPoints();
     }
     
     public int getType() {
@@ -229,7 +231,7 @@ public class Game {
                 }
             }
             if (sum == 11) {
-                this.points++;
+                this.level.nextLevel();
                 this.removeRowYAndMoveAllRowsDown(y);
                 y--;
             }

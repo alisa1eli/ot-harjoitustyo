@@ -1,5 +1,6 @@
 package tetris.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ public class OldGame implements Comparable<OldGame> {
     String date;
     
     public OldGame(int score) {
-        this.date = this.dateToString(new Date());
+        this.date = this.dateToString(Calendar.getInstance());
         this.id = -1;
         this.score = score;
     }
@@ -45,14 +46,15 @@ public class OldGame implements Comparable<OldGame> {
         this.id = id;
     }
     
-    public String dateToString(Date object) {
-        String date = object.getYear() + "." + object.getMonth() + 
-                "." + object.getDay() + "." + object.getHours() + "."
-                + object.getMinutes() + "." + object.getSeconds();
+    public String dateToString(Calendar object) {
+        String date = object.get(Calendar.HOUR_OF_DAY)+":"+object.get(Calendar.MINUTE)+
+                " " + object.get(Calendar.DAY_OF_MONTH) +"."+object.get(Calendar.MONTH)+
+                "." + object.get(Calendar.YEAR);
         return date;
     }
     
     public String toString() {
-        return this.id + " | " + this.score + " | " + this.date;
+        String[] d = this.date.split(".");
+        return  this.score + " | " + this.date;
     }
 }

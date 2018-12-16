@@ -293,36 +293,40 @@ public class TetrisUi extends Application {
                                
                 @Override
                 public void handle(long now) {
-                    if (now - edellinen <  ( (long) 500000000 )) {
+                    if (now - edellinen <  ( (long) 500000000 - 50000000*(game.getPoints()+1))) {
                         return;
                     }
-
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < lenght; x++) {
                             if (game.visible()[x][y] == 1) {
-                                gc.setFill(Color.web("#585858"));
-                                gc.fillRect(x * 35, y * 35, 35, 35);
-                            } else {
-                                gc.setFill(Color.WHITE);
-                                gc.fillRect(x * 35, y * 35, 35, 35);
-                            }
+//                                            gc.setFill(Color.web("#585858"));
+                                            gc.setFill(Color.web("#c57e00"));
+                                            gc.fillRect(x * 35, y * 35, 35, 35);
+                                        } else {
+                                            gc.setFill(Color.WHITE);
+                                            gc.fillRect(x * 35, y * 35, 35, 35);
+                                        }
+//                                Color c = Color.web(game.getColors(x, y));
+//                                gc.setFill(c);
+//                                gc.fillRect(x * 35, y * 35, 35, 35);
+//
+////                                gc.setFill(Color.WHITE);
+////                                gc.fillRect(x * 35, y * 35, 35, 35);
+////                            }
                         }
                     }
                     if ( game.update() ) {
                         gameScene.setOnKeyPressed(e -> {
                             if (e.getCode() == KeyCode.SPACE) {
                                 game.makeMove(3);
+                                this.edellinen = 500000000 + 1;
+                                return;
                             } else {
                                 if (e.getCode() == KeyCode.RIGHT) {
                                     game.makeMove(1);
                                 } else if (e.getCode() == KeyCode.LEFT) {
                                     game.makeMove(2);
-                                } 
-//                                else if (e.getCode() == KeyCode.SPACE) {
-//                                    game.makeMove(3);
-//
-//                                } 
-                                else if (e.getCode() == KeyCode.UP) {
+                                } else if (e.getCode() == KeyCode.UP) {
                                     game.rotate();
                                 } else if (e.getCode() == KeyCode.DOWN) {
                                     game.update();
@@ -331,7 +335,8 @@ public class TetrisUi extends Application {
                             for (int y = 0; y < height; y++) {
                                     for (int x = 0; x < lenght; x++) {
                                         if (game.visible()[x][y] == 1) {
-                                            gc.setFill(Color.web("#585858"));
+//                                            gc.setFill(Color.web("#585858"));
+                                            gc.setFill(Color.web("#c57e00"));
                                             gc.fillRect(x * 35, y * 35, 35, 35);
                                         } else {
                                             gc.setFill(Color.WHITE);

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tetris.dao;
 
 import java.sql.Connection;
@@ -10,11 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 import tetris.domain.OldGame;
-import tetris.domain.User;
 
 /**
  *
@@ -38,13 +30,6 @@ public class GameDao implements Dao<OldGame, Integer> {
         
         while (rs.next()) {
             String date = rs.getString("date");
-//            String[] d = rs.getString("date").split(Pattern.quote("."));
-//            int sec = Integer.parseInt(d[5]);
-//            int min = Integer.parseInt(d[4]);
-//            int hours = Integer.parseInt(d[3]);
-//            int day = Integer.parseInt(d[2]);
-//            int month = Integer.parseInt(d[1]);
-//            int year = Integer.parseInt(d[0]);
             
             games.add(new OldGame(rs.getInt("id"), rs.getInt("score"), date));
         }
