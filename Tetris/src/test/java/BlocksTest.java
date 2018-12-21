@@ -10,18 +10,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tetris.domain.Blocks;
+import tetris.domain.Block;
 
 /**
  *
  * @author alisaelizarova
  */
 public class BlocksTest {
-    Blocks blocks;
+    Block blocks;
 
     @Before
     public void setUp() {
-        this.blocks = new Blocks();
+        this.blocks = new Block();
     }
     @Test 
     public void methodSetAllTheSameValueWorksProperly() {

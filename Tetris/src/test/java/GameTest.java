@@ -51,16 +51,12 @@ public class GameTest {
     public void whenGameStartsPositionOfTheMovingPartIsCorrect() {
         assertEquals(" 5 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
     }
+
 //    @Test
-//    public void typeOneCanBeMovedRight() {
-//        game.makeMove(1);
-//        assertEquals(" 6 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
+//    public void typeOneCanBeMovedLeft() {
+//        game.makeMove(2);
+//        assertEquals(" 4 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
 //    }
-    @Test
-    public void typeOneCanBeMovedLeft() {
-        game.makeMove(2);
-        assertEquals(" 4 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
-    }
     @Test
     public void typeOneCanBePutDown() {
         game.makeMove(3);
@@ -72,42 +68,30 @@ public class GameTest {
         assertEquals(" 5 4, 5 3, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
     }
     @Test
-    public void typeSixCanBeMovedRight() {
-        game.addNewFigure(6);
-        game.makeMove(1);
-        assertEquals(" 6 4, 7 4, -1 -1, 6 3,", game.matrixToString(game.getMovingPart()));
-    }
-    @Test
-    public void typeFourCanBeMovedRight() {
-        game.addNewFigure(4);
-        game.makeMove(1);
-        assertEquals(" 6 4, 6 3, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
-    }
-    @Test
     public void typeFiveWillNotBeMovedRightIfSomeBlocksNextToIt() {
         game.addNewFigure(5);
         game.reservePlace(6, 3);
         game.makeMove(1);
         assertEquals(" 5 4, 5 3, 5 2, -1 -1,", game.matrixToString(game.getMovingPart()));
     }
-    @Test
-    public void typeSevenCanBeMovedLeft() {
-        game.addNewFigure(7);
-        game.makeMove(2);
-        assertEquals(" 3 4, 4 4, -1 -1, 4 3,", game.matrixToString(game.getMovingPart()));
-    }
+//    @Test
+//    public void typeSevenCanBeMovedLeft() {
+//        game.addNewFigure(7);
+//        game.makeMove(2);
+//        assertEquals(" 3 4, 4 4, -1 -1, 4 3,", game.matrixToString(game.getMovingPart()));
+//    }
     @Test
     public void typeFiveCanBePutDown() {
         game.addNewFigure(5);
         game.makeMove(3);
         assertEquals(" 5 25, 5 24, 5 23, -1 -1,", game.matrixToString(game.getMovingPart()));
     }
-    @Test
-    public void typeFiveCanBeMovedLeft() {
-        game.addNewFigure(5);
-        game.makeMove(2);
-        assertEquals(" 4 4, 4 3, 4 2, -1 -1,", game.matrixToString(game.getMovingPart()));
-    }
+//    @Test
+//    public void typeFiveCanBeMovedLeft() {
+//        game.addNewFigure(5);
+//        game.makeMove(2);
+//        assertEquals(" 4 4, 4 3, 4 2, -1 -1,", game.matrixToString(game.getMovingPart()));
+//    }
     @Test
     public void typeFourWillNotBeMovedLeftIfSomeBlocksNextToIt() {
         game.addNewFigure(4);

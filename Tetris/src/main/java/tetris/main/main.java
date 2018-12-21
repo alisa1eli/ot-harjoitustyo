@@ -13,5 +13,6 @@ public class main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Application.launch(TetrisUi.class);
+        
     }  
 }
