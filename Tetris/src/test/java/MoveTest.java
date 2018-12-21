@@ -83,6 +83,35 @@ public class MoveTest {
         int[][] mP = this.move.moveLeft(field, movingPart);
         assertEquals(" 4 4, 4 3, 4 2, -1 -1,", matrixToString(mP));
     }
+    @Test
+    public void typeOneCanBeMovedToTheButtom() {
+        int[][] movingPart = this.block.getBlocks(1);
+        this.setBlocksOnTheField(movingPart, 1);
+        int[][] mP = this.move.moveDown(field, movingPart);
+        assertEquals(" 5 25, -1 -1, -1 -1, -1 -1,", matrixToString(mP));
+    }
+    @Test
+    public void typeOneCanBeMovedToTheButtomIfThereAreAlreadySomeBlocks() {
+        int[][] movingPart = this.block.getBlocks(1);
+        this.setBlocksOnTheField(movingPart, 1);
+        this.field[5][25] = 1;
+        int[][] mP = this.move.moveDown(field, movingPart);
+        assertEquals(" 5 24, -1 -1, -1 -1, -1 -1,", matrixToString(mP));
+    }
+    @Test
+    public void typeFiveCanBeMovedToTheButtom() {
+        int[][] movingPart = this.block.getBlocks(5);
+        this.setBlocksOnTheField(movingPart, 5);
+        int[][] mP = this.move.moveDown(field, movingPart);
+        assertEquals(" 5 25, 5 24, 5 23, -1 -1,", matrixToString(mP));
+    }
+    @Test
+    public void typeNineCanBeMovedToTheButtom() {
+        int[][] movingPart = this.block.getBlocks(9);
+        this.setBlocksOnTheField(movingPart, 9);
+        int[][] mP = this.move.moveDown(field, movingPart);
+        assertEquals(" 4 24, 5 24, -1 -1, 5 25,", matrixToString(mP));
+    }
     private String matrixToString(int a[][]) {
         String r = "";
         for (int i = 0; i < a.length; i++) {

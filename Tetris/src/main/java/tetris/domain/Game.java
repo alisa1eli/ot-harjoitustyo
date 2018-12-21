@@ -377,106 +377,10 @@ public class Game {
     }
     
     private void makeMoveLeft() {
-        if (this.onTheEdge(0)) {
-            return;
-        }
-        int[][] toCheck = new int[3][2];
-        this.setAllTheSameValue(toCheck, -1);
-        if (this.type == 1 || this.type == 2 || this.type == 3) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-        } else if (this.type == 4) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-        } else if (this.type == 5) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-            toCheck[2][0] = this.movingPart[2][0];
-            toCheck[2][1] = this.movingPart[2][1];
-        } else if (this.type == 6 || this.type == 7 || this.type == 8 || this.type == 9) {
-            toCheck[0][0] = this.movingPart[3][0];
-            toCheck[0][1] = this.movingPart[3][1];
-            toCheck[1][0] = this.movingPart[0][0];
-            toCheck[1][1] = this.movingPart[0][1];
-        }
-        for (int x = 0; x < 3; x++) {
-            if (toCheck[x][0] == -1) {
-                break;
-            } 
-            if (this.field[toCheck[x][0] - 1][toCheck[x][1]] != 0) {
-                return;
-            }
-        }
-        for (int x = 0; x < 4; x++) {
-            if (this.movingPart[x][0] != -1) {
-                this.setMovingPartPosition(this.type,x, this.movingPart[x][0] - 1, this.movingPart[x][1], this.movingPart[x][0], this.movingPart[x][1]);
-            }
-        }
-        
+        this.setMovingPart(this.move.moveLeft(field, movingPart));        
     }
     private void makeMoveDown() {
-        if (this.movingPart[0][1] == 25) {
-            return;
-        }
-        int[][] toCheck = new int[3][2];
-        this.setAllTheSameValue(toCheck, -1);
-        if (this.type == 1 || this.type == 2 || this.type == 3 || this.type == 6 || this.type == 7) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-            toCheck[2][0] = this.movingPart[2][0];
-            toCheck[2][1] = this.movingPart[2][1];
-        } else if (this.type == 4 || this.type == 5) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-        } else if (this.type == 8) {
-            toCheck[0][0] = this.movingPart[3][0];
-            toCheck[0][1] = this.movingPart[3][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-        } else if (this.type == 9) {
-            toCheck[0][0] = this.movingPart[3][0];
-            toCheck[0][1] = this.movingPart[3][1];
-            toCheck[1][0] = this.movingPart[0][0];
-            toCheck[1][1] = this.movingPart[0][1];
-        }
-        int d = 0;                                                              // d says how many blocks we chould take our figure down.
-        while (true) {
-            for (int x = 0; x < 3; x++) {
-                if (toCheck[x][0] != -1) {
-                    if (this.field[toCheck[x][0]][toCheck[x][1] + d + 1] != 0 ) {      
-                        if (this.type == 8 || this.type == 9) {
-                            for(int xN = 3; xN >= 0; xN--) {
-                                if (this.movingPart[xN][0] != -1) {
-                                    this.setMovingPartPosition(this.type, xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
-                                }
-                            } 
-                        } else {
-                            for(int xN = 0; xN < 4; xN++) {
-                                if (this.movingPart[xN][0] != -1) {
-                                    this.setMovingPartPosition(this.type, xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
-                                }
-                            }
-                        }
-                        return;
-                    }
-                }
-            }
-            d++;
-            if (toCheck[0][1] + d == 25) {
-                for (int xN = 0; xN < 4; xN++) {
-                        if (this.movingPart[xN][0] != -1) {
-                            this.setMovingPartPosition(this.type, xN, this.movingPart[xN][0], this.movingPart[xN][1] + d, this.movingPart[xN][0], this.movingPart[xN][1]);
-                        }
-                    }
-                return;
-            } 
-        }
+        this.setMovingPart(this.move.moveDown(field, movingPart));
     }
     
     /**

@@ -44,6 +44,24 @@ public class Move {
         return movingPart;
     }
     
+    public int[][] moveDown(int[][] field, int[][] mP) {
+        int[][] movingPart = this.copyArray(mP);
+        if (this.onTheEdge(movingPart, 2)) {
+            return movingPart;
+        }
+        int type = field[movingPart[0][0]][movingPart[0][1]];
+        int[][] toCheck = this.moveDownBlocksToCheck(movingPart, type);
+        System.out.println("Blocks to check : " + this.matrixToString(toCheck));
+        int d = this.howManyBlocksWeCanTakeBlocksDown(field, toCheck);          // d says how many blocks we chould take our figure down.
+        System.out.println("We should take it " + d + " blocks down." );
+        for(int x = 0; x < 4; x++) {
+            if (movingPart[x][0] != -1) {
+                movingPart[x][1] = movingPart[x][1] + d;  
+            }
+        }
+        return movingPart;
+    }
+    
     
     private int[][] moveRightBlocksToCheck(int[][] movingPart, int type) {
         if (type == 1 || type == 2 || type == 3) {
@@ -79,6 +97,23 @@ public class Move {
         return null;
     }
     
+    private int[][] moveDownBlocksToCheck(int[][] movingPart, int type) {
+        if (type == 1 || type == 2 || type == 3 || type == 6 || type == 7) {
+            int[][] t = { {movingPart[0][0], movingPart[0][1]}, { movingPart[1][0], movingPart[1][1]}, {movingPart[2][0], movingPart[2][1]} };
+            return t;
+        } else if (type == 4 || type == 5) {
+            int[][] t = { {movingPart[0][0], movingPart[0][1]}, {-1, -1}, {-1, -1}};
+            return t;
+        } else if (type == 8) {
+            int[][] t = {{movingPart[3][0], movingPart[3][1]}, {movingPart[1][0],movingPart[1][1]}, {-1, -1}};
+            return t;
+        } else if (type == 9) {
+            int[][] t = { {movingPart[3][0],movingPart[3][1]}, {movingPart[0][0], movingPart[0][1]}, {-1, -1}};
+            return t;
+        }
+        return null;
+    }
+    
     private boolean allBlocksCanBeMovedTo(int a, int[][] field, int[][] toCheck ) {
         // 1 stands for right and -1 for left
         System.out.println("Matrix to check : "+this.matrixToString(toCheck));
@@ -91,19 +126,34 @@ public class Move {
             }
         }
         return true;
-//        } else if (a == 0) {
-//            for (int x = 0; x < 3; x++) {
-//                if (toCheck[x][0] == -1) {
-//                    break;
-//                } 
-//                if (field[toCheck[x][0] - 1][toCheck[x][1]] != 0) {
-//                    return false;
-//                }
-//            }
-//            return true;
-//        }
-//        return false;
     } 
+    
+    private int howManyBlocksWeCanTakeBlocksDown(int[][] field, int[][] toCheck) {
+        int free = 3; 
+        int d = 0;                                                             // d says how many blocks we chould take our figure down.
+        while(free == 3) { 
+            d++;
+            free = 0;
+            System.out.println("Loop n " + d);
+            for (int x = 0; x < 3; x++) {
+                if (toCheck[x][0] != -1) {
+                    if (toCheck[x][1] + d > 25) {
+                        d--;
+                        break;
+                    }
+                    if (field[toCheck[x][0]][toCheck[x][1] + d] == 0) {
+                        free++;
+                    } else {
+                        d--;
+                        free--;
+                    }
+                } else {
+                    free++;
+                }
+            }
+        }
+        return d;
+    }
     
     private boolean onTheEdge(int[][] movingPart, int a) {              // check if any blocks is next to the edge of the field, if so return TRUE
         if (a == 1)  {                              // 1 stands for moving right 
@@ -115,6 +165,12 @@ public class Move {
         } else if (a == 0) {                         // 0 stands for moving left 
             for (int x = 0; x < 4; x++) {
                 if(movingPart[x][0] == 0) {
+                    return true;
+                }
+            }
+        } else if (a == 2) {                           // 2 stands for the bottom
+            for (int x = 0; x < 4; x++) {
+                if(movingPart[x][1] == 25) {
                     return true;
                 }
             }
