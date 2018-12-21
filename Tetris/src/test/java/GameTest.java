@@ -51,11 +51,11 @@ public class GameTest {
     public void whenGameStartsPositionOfTheMovingPartIsCorrect() {
         assertEquals(" 5 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
     }
-    @Test
-    public void typeOneCanBeMovedRight() {
-        game.makeMove(1);
-        assertEquals(" 6 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
-    }
+//    @Test
+//    public void typeOneCanBeMovedRight() {
+//        game.makeMove(1);
+//        assertEquals(" 6 4, -1 -1, -1 -1, -1 -1,", game.matrixToString(game.getMovingPart()));
+//    }
     @Test
     public void typeOneCanBeMovedLeft() {
         game.makeMove(2);

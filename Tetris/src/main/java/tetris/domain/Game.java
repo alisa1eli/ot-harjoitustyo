@@ -19,7 +19,8 @@ public class Game {
     int[][] movingPart;
     Level level;
     int points;
-    
+    Move move;
+    Block block;
     
     public Game() {
         this.field = new int[11][26];
@@ -30,10 +31,11 @@ public class Game {
         this.colums = new int[11];
         this.type = 1;
         this.movingPart = new int[4][2];
+        this.block = new Block();
         this.addNewFigure(1);
         this.points = 0;
         this.level = new Level();
-        
+        this.move = new Move();
     }
     public void setMovingPartPosition(int t, int row, int x, int y, int xDelete, int yDelete) {
 
@@ -358,46 +360,57 @@ public class Game {
         return false;
     }
     private void makeMoveRight() {
-        if (this.onTheEdge(1)) {                                                // check if any blocks is next to the edge of the field
-            return;                                                             // and if so, no move can be made.
-        }
-        int[][] toCheck = new int[3][2];
-        this.setAllTheSameValue(toCheck, -1);
-        if (this.type == 1 || this.type == 2 || this.type == 3) {
-            toCheck[0][0] = this.movingPart[this.type - 1][0];
-            toCheck[0][1] = this.movingPart[this.type - 1][1];
-        } else if (this.type == 4) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-        } else if (this.type == 5) {
-            toCheck[0][0] = this.movingPart[0][0];
-            toCheck[0][1] = this.movingPart[0][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-            toCheck[2][0] = this.movingPart[2][0];
-            toCheck[2][1] = this.movingPart[2][1];
-        } else if (this.type == 6 || this.type == 7 || this.type == 8 || this.type == 9) {
-            toCheck[0][0] = this.movingPart[3][0];
-            toCheck[0][1] = this.movingPart[3][1];
-            toCheck[1][0] = this.movingPart[1][0];
-            toCheck[1][1] = this.movingPart[1][1];
-        }
-        for (int x = 0; x < 3; x++) {
-            if (toCheck[x][0] == -1) {
-                break;
-            } 
-            if (this.field[toCheck[x][0] + 1][toCheck[x][1]] != 0) {
-                return;
-            }
-        }
-        for (int x = 3; x >= 0; x--) {
-            if (this.movingPart[x][0] != -1) {
-                this.setMovingPartPosition(this.type, x, this.movingPart[x][0] + 1, this.movingPart[x][1], this.movingPart[x][0], this.movingPart[x][1]);
-            }
-        }
+//        this.movingPart = this.move.moveRight(field, movingPart);
+//        
+//        if (this.onTheEdge(1)) {                                                // check if any blocks is next to the edge of the field
+//            return;                                                             // and if so, no move can be made.
+//        }
+//        int[][] toCheck = new int[3][2];
+//        this.setAllTheSameValue(toCheck, -1);
+//        if (this.type == 1 || this.type == 2 || this.type == 3) {
+//            toCheck[0][0] = this.movingPart[this.type - 1][0];
+//            toCheck[0][1] = this.movingPart[this.type - 1][1];
+//        } else if (this.type == 4) {
+//            toCheck[0][0] = this.movingPart[0][0];
+//            toCheck[0][1] = this.movingPart[0][1];
+//            toCheck[1][0] = this.movingPart[1][0];
+//            toCheck[1][1] = this.movingPart[1][1];
+//        } else if (this.type == 5) {
+//            toCheck[0][0] = this.movingPart[0][0];
+//            toCheck[0][1] = this.movingPart[0][1];
+//            toCheck[1][0] = this.movingPart[1][0];
+//            toCheck[1][1] = this.movingPart[1][1];
+//            toCheck[2][0] = this.movingPart[2][0];
+//            toCheck[2][1] = this.movingPart[2][1];
+//        } else if (this.type == 6 || this.type == 7 || this.type == 8 || this.type == 9) {
+//            toCheck[0][0] = this.movingPart[3][0];
+//            toCheck[0][1] = this.movingPart[3][1];
+//            toCheck[1][0] = this.movingPart[1][0];
+//            toCheck[1][1] = this.movingPart[1][1];
+//        }
+//        for (int x = 0; x < 3; x++) {
+//            if (toCheck[x][0] == -1) {
+//                break;
+//            } 
+//            if (this.field[toCheck[x][0] + 1][toCheck[x][1]] != 0) {
+//                return;
+//            }
+//        }
+        this.setMovingPart(this.move.moveRight(field, movingPart));
     }    
+    private void setMovingPart(int[][] mP) {
+        for (int x = 0; x < 4; x++) {
+            if (this.movingPart[x][0] != -1) {
+                this.field[this.movingPart[x][0]][this.movingPart[x][1]] = 0;
+            }
+        }
+        this.movingPart = mP;
+        for (int x = 0; x < 4; x++) {
+            if (this.movingPart[x][0] != -1) {
+                this.field[this.movingPart[x][0]][this.movingPart[x][1]] = this.type;
+            }
+        }
+    }
     private void makeMoveLeft() {
         if (this.onTheEdge(0)) {
             return;
@@ -620,68 +633,71 @@ public class Game {
         return dst;
     }
     private int[][] getCurentTypeOfFigure() {
-        int[][] a = new int[4][2];
-        this.setAllTheSameValue(a, -1);
-        if (this.type == 1) {
-            a[0][0] = 5;
-            a[0][1] = 4;
-        } else if (this.type == 2) {
-            a[0][0] = 5;
-            a[0][1] = 4;
-            a[1][0] = 6;
-            a[1][1] = 4;
-        }
-        if (this.type == 3) {
-            a[0][0] = 5;
-            a[0][1] = 4;
-            a[1][0] = 6;
-            a[1][1] = 4;
-            a[2][0] = 7;
-            a[2][1] = 4;
-        }
-        if (this.type == 4) {
-            a[0][0] = 5;
-            a[0][1] = 4;
-            a[1][0] = 5;
-            a[1][1] = 3;
-        } else if (this.type == 5) {
-            a[0][0] = 5;
-            a[0][1] = 4;
-            a[1][0] = 5;
-            a[1][1] = 3;
-            a[2][0] = 5;
-            a[2][1] = 2;
-        } else if (this.type == 6) {
-            a[0][0] = 5;
-            a[0][1] = 4;
-            a[1][0] = 6;
-            a[1][1] = 4;
-            a[3][0] = 5;
-            a[3][1] = 3;
-        } else if (this.type == 7) {
-            a[0][0] = 4;
-            a[0][1] = 4;
-            a[1][0] = 5;
-            a[1][1] = 4;
-            a[3][0] = 5;
-            a[3][1] = 3;
-        } else if (this.type == 8) {
-            a[0][0] = 5;
-            a[0][1] = 3;
-            a[1][0] = 6;
-            a[1][1] = 3;
-            a[3][0] = 5;
-            a[3][1] = 4;
-        } else if (this.type == 9) {
-            a[0][0] = 4;
-            a[0][1] = 3;
-            a[1][0] = 5;
-            a[1][1] = 3;
-            a[3][0] = 5;
-            a[3][1] = 4;
-        }
-        return a;
+        System.out.println("The type is "+ this.type);
+        return this.block.getBlocks(this.type);
+//        int[][] a = new int[4][2];
+//        this.setAllTheSameValue(a, -1);
+//        if (this.type == 1) {
+////            a[0][0] = 5;
+////            a[0][1] = 4;
+//        } else if (this.type == 2) {
+////            a[0][0] = 5;
+////            a[0][1] = 4;
+////            a[1][0] = 6;
+////            a[1][1] = 4;
+//        }
+//        if (this.type == 3) {
+//            a[0][0] = 5;
+//            a[0][1] = 4;
+//            a[1][0] = 6;
+//            a[1][1] = 4;
+//            a[2][0] = 7;
+//            a[2][1] = 4;
+//        }
+//        if (this.type == 4) {
+//            a[0][0] = 5;
+//            a[0][1] = 4;
+//            a[1][0] = 5;
+//            a[1][1] = 3;
+//        } else if (this.type == 5) {
+//            a[0][0] = 5;
+//            a[0][1] = 4;
+//            a[1][0] = 5;
+//            a[1][1] = 3;
+//            a[2][0] = 5;
+//            a[2][1] = 2;
+//        } else if (this.type == 6) {
+//            a[0][0] = 5;
+//            a[0][1] = 4;
+//            a[1][0] = 6;
+//            a[1][1] = 4;
+//            a[3][0] = 5;
+//            a[3][1] = 3;
+//        } else if (this.type == 7) {
+//            a[0][0] = 4;
+//            a[0][1] = 4;
+//            a[1][0] = 5;
+//            a[1][1] = 4;
+//            a[3][0] = 5;
+//            a[3][1] = 3;
+//        } else if (this.type == 8) {
+//            a[0][0] = 5;
+//            a[0][1] = 3;
+//            a[1][0] = 6;
+//            a[1][1] = 3;
+//            a[3][0] = 5;
+//            a[3][1] = 4;
+//        } else if (this.type == 9) {
+//            a[0][0] = 4;
+//            a[0][1] = 3;
+//            a[1][0] = 5;
+//            a[1][1] = 3;
+//            a[3][0] = 5;
+//            a[3][1] = 4;
+//        }
+//        return a;
     }
+    
     public String getColor(int x, int y) {
         return this.level.getColors()[this.field[x][y + 4]];
     }
