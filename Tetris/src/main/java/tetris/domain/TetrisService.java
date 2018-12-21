@@ -115,4 +115,10 @@ public class TetrisService {
     public void signOutTheCurrentUser() {
         this.signedIn = null;
     }
+
+    public void updateUsersName(String name) throws SQLException {
+        this.signedIn.setName(name);
+        this.userDao.update(signedIn);
+    }
+
 }

@@ -83,36 +83,29 @@ public class Game {
     
      /**
      * This method will update your game, which means
-     * that the moving part (blocks) will be put down 
-     * be one step. 
+     * that the moving part (blocks) will be moved down 
+     * by one step. 
      * 
      * @return TRUE means that the update succeed and 
      * FALSE means that the game is over. 
      */
     public boolean update() {
-        String beforeUpdate = Arrays.deepToString(this.movingPart);
+        String beforeUpdate = Arrays.deepToString(this.movingPart);             // this way will be possible compared if the moving part has moved or it is already on the bottom and a new blocks are needed
 
-        updateType1();
+        updateType1();                                                          // the moving part is updated by its type
         updateType2();
         updateType6();
         updateType8();
         updateType9();
-        
-        this.printMatrix(field);
-
 
         if (Arrays.deepToString(this.movingPart).equals(beforeUpdate)) {
-            this.aRowIsFull();
-            Random random = new Random();
-            this.type = random.nextInt(9 - 1 + 1) + 1;
-//            this.type = 7;
+            this.aRowIsFull();                                                  // the program checks is there are any full rows
+            Random random = new Random();                                       // to choose the next block
+            this.type = random.nextInt(9 - 1 + 1) + 1;                          // at the moment there is only 9 different blocks
             if (this.gameover()) {
                 return false;
             }
-            this.printMatrix(field);
-            System.out.println("Adding new figure: ");
             this.addNewFigure(this.type);
-            System.out.println("-----------------------------------------------");
         }
         return true;
     }
@@ -158,6 +151,7 @@ public class Game {
             }
         }
     }
+    
     /**
      * This method contains logics, with which blocks of types 6, 7 
      * will be updated ( = moved down).
@@ -181,18 +175,17 @@ public class Game {
                     } 
                 }
                 this.setMovingPartPosition(this.type, 3, movingPart[3][0], movingPart[3][1] + 1, movingPart[3][0], movingPart[3][1]);
-            }
-            
+            } 
         }
-        
     }
+    /**
+     * This method contains logics, with which blocks of types 8 
+     * will be updated ( = moved down).
+     */
     private void updateType8() {
-        if (this.movingPart[3][1] == 25) {
-            return;
-        }
         if (this.type == 8 ) {
-            if (this.field[this.movingPart[1][0]][this.movingPart[1][1] + 1] == 0 && 
-                    this.field[this.movingPart[3][0]][this.movingPart[3][1] + 1] == 0) {
+            if (this.roomUnder(this.movingPart[1][0],this.movingPart[1][1]) && 
+                    this.roomUnder(this.movingPart[3][0],this.movingPart[3][1])) {
                 for (int x = 3; x >= 0; x--) {
                     if (this.movingPart[x][0] != -1) {
                         this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
@@ -200,7 +193,6 @@ public class Game {
                 }
             }
         }
-        
     }
     private void updateType9() {
         if (this.movingPart[3][1] == 25) {
@@ -695,5 +687,30 @@ public class Game {
     }
     public String getColor(int x, int y) {
         return this.level.getColors()[this.field[x][y + 4]];
+    }
+    public long getSpeed() {
+        long speed = this.level.getSpeed();
+        return speed;
+    }
+
+    public void setLevel(String text) {    
+        String t[] = text.split(" ");
+        if (!t[0].equals("arcade")) {
+            if (t[0].equals("slow")) {
+                this.level.setSpeed(1);
+            } else if (t[0].equals("medium")) {
+                
+                this.level.setSpeed(2);
+            } else {
+                this.level.setSpeed(3);
+            }
+        } else {
+            this.level.setArcadeTrue();
+        }
+        if ((t[2].equals("fading"))) {
+            this.level.setFading(true);
+        } else {
+            this.level.setFading(false);
+        }
     }
 }

@@ -32,7 +32,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -53,6 +56,8 @@ public class TetrisUi extends Application {
     private Scene personalScene;
     private Scene gameOverScene;
     private Scene gameScene;
+    private Scene changeNameScene;
+    private Scene gameSettingsScene;
     
     @Override
     public void init() throws ClassNotFoundException {
@@ -69,15 +74,13 @@ public class TetrisUi extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        // signInOrSignUpScene
+        // signInOrSignUpScene -------------------------------------------------
         
-        VBox firstPagePane = new VBox(10);
-//        loginPane.setPadding(new Insets(20));
-//        loginPane.setSpacing(30);
-        firstPagePane.setAlignment(Pos.CENTER);
+        VBox firstPagePane = new VBox();
         Label firstPageLabel = new Label();
         firstPageLabel.setId("label");
-
+        Label tetrisLabel = new Label("Tetris!");
+        tetrisLabel.setId("title");
         
         Button signInButton = new Button("Sign in");
         signInButton.setId("button");
@@ -92,45 +95,47 @@ public class TetrisUi extends Application {
             stage.setScene(signInScene);   
         }); 
         
-        firstPagePane.getChildren().addAll(signInButton, signUpButton, firstPageLabel);      
+        firstPagePane.getChildren().addAll(tetrisLabel, signInButton, 
+                signUpButton, firstPageLabel);      
         firstPagePane.setId("basic");
         signInOrSignUpScene = new Scene(firstPagePane, 385, 770);    
         signInOrSignUpScene.getStylesheets().add("file:style.css");
         
         stage.setScene(signInOrSignUpScene);
         
-        // signUpScene
         
-        VBox newUserPane = new VBox(10);
         
-        HBox newUsernamePane = new HBox(10);
-        newUsernamePane.setPadding(new Insets(10));
+        
+        // signUpScene  --------------------------------------------------------
+        
+        VBox newUserPane = new VBox(20);
+        newUserPane.setPadding(new Insets(30));
+        
+        HBox newLoginPane = new HBox();
+        newLoginPane.setId("insertInformation");
         TextField newLoginInput = new TextField();
         newLoginInput.setId("textfield");
         Label newUsernameLabel = new Label("Login");
-        newUsernameLabel.setId("label");
-        newUsernameLabel.setPrefWidth(100);
-        newUsernamePane.getChildren().addAll(newUsernameLabel, newLoginInput);
-        newUsernamePane.setAlignment(Pos.CENTER);
-        newUsernamePane.setPadding(new Insets(50));
+        newUsernameLabel.setId("insertInformationLabel");
+        newLoginPane.getChildren().addAll(newUsernameLabel, newLoginInput);
+
      
-        HBox newNamePane = new HBox(10);
-        newNamePane.setPadding(new Insets(10));
+        HBox newNamePane = new HBox(25);
+        newNamePane.setId("insertInformation");
         TextField newNameInput = new TextField();
         newNameInput.setId("textfield");
         Label newNameLabel = new Label("Name");
-        newNameLabel.setId("label");
-        newNameLabel.setPrefWidth(100);
-        newNamePane.getChildren().addAll(newNameLabel, newNameInput); 
-        newNamePane.setAlignment(Pos.CENTER);
-        newNamePane.setPadding(new Insets(0, 50, 50, 50));
+        newNameLabel.setId("insertInformationLabel");
+        newNamePane.getChildren().addAll(newNameLabel, newNameInput);
+
         
         Button backSignUpButton = new Button("Back");
-        backSignUpButton.setPadding(new Insets(10));
+        backSignUpButton.setId("button");
         backSignUpButton.setOnAction(e-> {
+            
             stage.setScene(signInOrSignUpScene);   
         });
-        backSignUpButton.setId("button");
+
         
         Label userCreationMessage = new Label();
         
@@ -142,9 +147,9 @@ public class TetrisUi extends Application {
             String login = newLoginInput.getText();
             String name = newNameInput.getText();
    
-            if (login.length() <= 3 || name.length() <= 3) {
-                userCreationMessage.setText("Your login or name is too short!");
-                userCreationMessage.setTextFill(Color.RED);              
+            if (login.length() <= 3 || name.length() <= 3 || login.length() > 20 || name.length() > 20 ) {
+                userCreationMessage.setText("Your login or name is too short or too long!");
+                userCreationMessage.setTextFill(Color.PINK);              
             } else 
                 try {
                     if (this.tetrisService.createUser(login, name)) {
@@ -157,7 +162,7 @@ public class TetrisUi extends Application {
                         stage.setScene(signInOrSignUpScene);
                     } else {
                         userCreationMessage.setText("This login is already taken!");        
-                        userCreationMessage.setTextFill(Color.RED);
+                        userCreationMessage.setTextFill(Color.PINK);
                     }
                 } catch (SQLException ex) {
                     Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
@@ -165,19 +170,30 @@ public class TetrisUi extends Application {
  
         });  
         
-        newUserPane.getChildren().addAll(userCreationMessage, newUsernamePane, 
-                newNamePane, signUpSceneButton, backSignUpButton); 
-        newUserPane.setAlignment(Pos.CENTER);
-        newUserPane.setId("basic");
-        signUpScene = new Scene(newUserPane, 385, 770);
+        newUserPane.getChildren().addAll(newLoginPane, newNamePane);
+        
+        VBox newUserPaneAndButtons = new VBox();
+        
+        newUserPaneAndButtons.getChildren().addAll(userCreationMessage, newUserPane, 
+                signUpSceneButton, backSignUpButton); 
+        newUserPaneAndButtons.setId("basic");
+        signUpScene = new Scene(newUserPaneAndButtons, 385, 770);
         signUpScene.getStylesheets().add("file:style.css");
         
-        // signInScene
+        
+        
+        
+        
+        // signInScene ---------------------------------------------------------
         
         // for personalScene
+        // Start:
         Label oldGamesLabel = new Label();
         oldGamesLabel.setPadding(new Insets(10));
         oldGamesLabel.setId("label");
+        Label oldGamesInfoLabel = new Label();
+        oldGamesInfoLabel.setPadding(new Insets(10));
+        oldGamesInfoLabel.setId("label");
         Label bestGame1 = new Label();
         bestGame1.setId("label");
         Label bestGame2 = new Label();
@@ -189,35 +205,38 @@ public class TetrisUi extends Application {
         listOfGames.setPadding(new Insets(0, 0, 50, 0));
         // end
         
-        VBox signInPane = new VBox(10);
-        signInPane.setPadding(new Insets(10));
+        VBox signInPane = new VBox();
+        signInPane.setId("basic");
+        
         TextField loginSignIn = new TextField();
         loginSignIn.setId("textfield");
         Label labelSignIn = new Label("Your login: ");
-        labelSignIn.setId("label");
+        labelSignIn.setId("insertInformationLabel");
+        
+        HBox loginSignInPane = new HBox();
+        loginSignInPane.setPadding(new Insets(30));
+        
+        loginSignInPane.setId("insertInformation");
+        loginSignInPane.getChildren().addAll(labelSignIn, loginSignIn);
+        
         Button signInSceneButton = new Button("Sign In!");
         signInSceneButton.setId("button");
-//        signInSceneButton.setPadding(new Insets(10));
         Button backSignInButton = new Button("Back");
         backSignInButton.setId("button");
-//        backSignInButton.setPadding(new Insets(10));
         Label signInSceneMessage = new Label();
         signInSceneMessage.setId("label");
         
-        HBox loginSignInPane = new HBox(10);
-        loginSignInPane.getChildren().addAll(labelSignIn, loginSignIn); 
-        loginSignInPane.setAlignment(Pos.CENTER);
-        loginSignInPane.setPadding(new Insets(0, 50, 50, 50));
-        
-        labelSignIn.setPrefWidth(100);
+         
+
         
         
         backSignInButton.setOnAction(e-> {
+            loginSignIn.setText("");
             stage.setScene(signInOrSignUpScene);   
         });
         
         Label welcomePersonalSceneLabel = new Label("Oops, you are not signed in!");
-        welcomePersonalSceneLabel.setId("label");
+        welcomePersonalSceneLabel.setId("title");
         
         signInSceneButton.setOnAction(e-> {
             String login = loginSignIn.getText();
@@ -228,16 +247,18 @@ public class TetrisUi extends Application {
                             // the next lines checks if there any saved old games. If so, 3 best are showed.
                             // Start:
                             
-                            oldGamesLabel.setText("Your best games:");
+                            oldGamesLabel.setText("Your 3 best games:");
+                            oldGamesInfoLabel.setText("Score | Date");
                             List<OldGame> oldGamesList = this.tetrisService.getUsersOldGames();
                             if(oldGamesList.isEmpty()) {
                                 oldGamesLabel.setText("");
+                                oldGamesInfoLabel.setText("");
                             } else {
                                 bestGame1.setText(oldGamesList.get(0).toString());
                                 if (oldGamesList.size() > 2) {
                                     bestGame2.setText(oldGamesList.get(1).toString());
                                     bestGame3.setText(oldGamesList.get(2).toString());
-                                } else {
+                                } else if (oldGamesList.size() == 2) {
                                     bestGame2.setText(oldGamesList.get(1).toString());
                                 }
                             }
@@ -246,7 +267,7 @@ public class TetrisUi extends Application {
                     stage.setScene(personalScene);
                 } else {
                     signInSceneMessage.setText("Wrong login!");
-                    signInSceneMessage.setTextFill(Color.RED);
+                    signInSceneMessage.setTextFill(Color.PINK);
                     
                 }
             } catch (SQLException ex) {
@@ -261,22 +282,39 @@ public class TetrisUi extends Application {
         signInScene = new Scene(signInPane, 385, 770);
         signInScene.getStylesheets().add("file:style.css");
         
-        // personalScene
+        
+        
+        
+        // personalScene -------------------------------------------------------
         
         VBox personalScenePane = new VBox(10);
         personalScenePane.setPadding(new Insets(10));
-
+        
+        Label nextGameInfoLabel = new Label("arcade and fading colors");
+        nextGameInfoLabel.setId("label");
+        
         Button newGameButton = new Button("New game!");
         newGameButton.setId("button");
         newGameButton.setPadding(new Insets(10));
 
         listOfGames.getChildren().addAll(bestGame1, bestGame2, bestGame3);
-        
-        boolean gameStarted = false;
-        
+              
         Label gameOverMessage = new Label("Game Over!");
         gameOverMessage.setId("label");
         
+        Button toChangeYourName = new Button("Change the name");
+        toChangeYourName.setId("button");
+        toChangeYourName.setOnAction(e-> {
+            stage.setScene(changeNameScene);   
+        });
+        
+        Button toChangeGameSettings = new Button("Game settings");
+        toChangeGameSettings.setId("button");
+        toChangeGameSettings.setOnAction(e-> {
+            stage.setScene(gameSettingsScene);   
+        });
+        
+        // This label will be used during the game:
         Label scoreOfTheGameLabel = new Label("");
         scoreOfTheGameLabel.setAlignment(Pos.CENTER);
         scoreOfTheGameLabel.setPrefWidth(385);
@@ -289,6 +327,7 @@ public class TetrisUi extends Application {
             Canvas gameField = new Canvas(420, 770);
             
             Game game = new Game();
+            game.setLevel(nextGameInfoLabel.getText());
             int height = game.getHeigth() - 4;
             int lenght = game.getLength();
             int[][] a = game.visible();
@@ -305,19 +344,12 @@ public class TetrisUi extends Application {
                                
                 @Override
                 public void handle(long now) {
-                    if (now - edellinen <  ( (long) 500000000 )) {
+                    if (now - edellinen <  (long) game.getSpeed() ) {
                         return;
                     }
                     scoreOfTheGameLabel.setText("Your score: " + game.getPoints());
                     for (int y = 0; y < height; y++) {
                         for (int x = 0; x < lenght; x++) {
-//                            if (game.visible()[x][y] != 0) {
-//                                            gc.setFill(Color.web("#c57e00"));
-//                                            gc.fillRect(x * 35, y * 35, 35, 35);
-//                                        } else {
-//                                            gc.setFill(Color.WHITE);
-//                                            gc.fillRect(x * 35, y * 35, 35, 35);
-//                                        }
                                 Color c = Color.web(game.getColor(x, y));
                                 gc.setFill(c);
                                 gc.fillRect(x * 35, y * 34, 35, 34);
@@ -381,8 +413,9 @@ public class TetrisUi extends Application {
             stage.setScene(this.signInOrSignUpScene);   
         }); 
 
-        personalScenePane.getChildren().addAll(welcomePersonalSceneLabel,  
-                newGameButton, oldGamesLabel, listOfGames, signOutButton); 
+        personalScenePane.getChildren().addAll(welcomePersonalSceneLabel, nextGameInfoLabel,  
+                newGameButton, oldGamesLabel, oldGamesInfoLabel, listOfGames, 
+                toChangeYourName, toChangeGameSettings, signOutButton); 
         personalScenePane.setAlignment(Pos.CENTER);
         personalScenePane.setId("basic");
         personalScenePane.getStylesheets().add("file:style.css");
@@ -424,7 +457,7 @@ public class TetrisUi extends Application {
             // Start:
             List<OldGame> oldGamesList;
             try {
-                oldGamesLabel.setText("Your best games:");
+                oldGamesLabel.setText("Your 3 best games:");
                 oldGamesList = this.tetrisService.getUsersOldGames();
                 bestGame1.setText(oldGamesList.get(0).toString());
                 if (oldGamesList.size() > 2) {
@@ -445,7 +478,148 @@ public class TetrisUi extends Application {
         gameOverPane.setId("basic");
         gameOverScene = new Scene(gameOverPane, 385, 770);    
         gameOverScene.getStylesheets().add("file:style.css");
+        
+        // ChangeTheNameScene --------------------------------------------------
+        Label wrongUpdatedNamelabe = new Label();
+        wrongUpdatedNamelabe.setId("label");
+        HBox updateNameSmallPane = new HBox();
+        updateNameSmallPane.setId("insertInformation");
+        Label updatedNameLabel = new Label("New name");
+        updatedNameLabel.setId("insertInformationLabel");
+        TextField updatedNameTextField = new TextField();
+        updateNameSmallPane.getChildren().addAll(updatedNameLabel, updatedNameTextField);
+        
+        Button updateNameButton = new Button("Update!");
+        updateNameButton.setId("button");
+        Button backUpdateNameButton = new Button("Back");
+        backUpdateNameButton.setId("button");
+        backUpdateNameButton.setOnAction(e-> {
+            wrongUpdatedNamelabe.setText("");
+            updatedNameTextField.setText("");
+            stage.setScene(personalScene);   
+        });
+        updateNameButton.setOnAction(e-> {
+            String updatedName = updatedNameTextField.getText();
+            if (!updatedName.isEmpty() ) {
+                if (updatedName.equals(this.tetrisService.getSignedInUser().getName())) {
+                    wrongUpdatedNamelabe.setText("Your current name is the same.");
+                } else {
+                    if (updatedName.length() > 3 && updatedName.length() < 15) {
+                        try {
+                            this.tetrisService.updateUsersName(updatedName);
+                            welcomePersonalSceneLabel.setText("Welcome " + this.tetrisService.getSignedInUser().getName() + "!");
+                            wrongUpdatedNamelabe.setText("Successfully updated!");
 
+                        } catch (SQLException ex) {
+                            Logger.getLogger(TetrisUi.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        wrongUpdatedNamelabe.setText("Too long or too short!");
+                    }
+                }
+            }
+            updatedNameTextField.setText("");   
+        });
+        
+        VBox updatedNamePane = new VBox();
+        updatedNamePane.getChildren().addAll(wrongUpdatedNamelabe, updateNameSmallPane, updateNameButton, backUpdateNameButton );
+        
+        changeNameScene = new Scene(updatedNamePane, 385, 770); 
+        updatedNamePane.setId("basic");   
+        changeNameScene.getStylesheets().add("file:style.css");
+        
+        // gameSettingsScene ---------------------------------------------------
+        
+        Label settingInfoLabel = new Label(" Here, you can choose \n "
+                + "how fast blocks will move and \n "
+                + "if their colors fading or not. \n \n "
+                + "Remember to save your changes! \n ");
+        settingInfoLabel.setId("label");
+        Label speedLabel = new Label("Speed:");
+        speedLabel.setId("label");
+        
+        VBox speeds = new VBox();
+        speeds.setAlignment(Pos.CENTER);
+        RadioButton option1 = new RadioButton("Arcade");
+        RadioButton option2 = new RadioButton("Slow");
+        RadioButton option3 = new RadioButton("Medium");
+        RadioButton option4 = new RadioButton("Fast");
+        ToggleGroup radioGroup1 = new ToggleGroup();
+        option1.setId("radiobutton");
+        option2.setId("radiobutton");
+        option3.setId("radiobutton");
+        option4.setId("radiobutton");
+        
+        option1.setToggleGroup(radioGroup1);
+        option2.setToggleGroup(radioGroup1);
+        option3.setToggleGroup(radioGroup1);
+        option4.setToggleGroup(radioGroup1);
+        
+        speeds.getChildren().addAll(option1, option2, option3, option4);
+        
+        Label fadingColorsLabel = new Label("Fading colors:");
+        fadingColorsLabel.setId("label");
+        VBox fatingColors = new VBox();
+        fatingColors.setAlignment(Pos.CENTER);
+        RadioButton yesFC = new RadioButton("Yes");
+        RadioButton noFC = new RadioButton("No");
+        yesFC.setId("radiobutton");
+        noFC.setId("radiobutton");
+        
+        ToggleGroup radioGroup2 = new ToggleGroup();
+        yesFC.setToggleGroup(radioGroup2);
+        noFC.setToggleGroup(radioGroup2);
+        fatingColors.getChildren().addAll(yesFC, noFC);
+        
+        Button saveGameSettingsButton = new Button("Save changes!");
+        saveGameSettingsButton.setId("button");
+        
+        Button backGameSettingsButton = new Button("Back");
+        backGameSettingsButton.setId("button");
+        
+        Label savesGameSettingLabel = new Label("");
+        savesGameSettingLabel.setId("label");
+        
+        saveGameSettingsButton.setOnAction( e-> {
+            String[] text = nextGameInfoLabel.getText().split(" ");
+            if(option1.isSelected()) {
+                text[0] = "arcade";
+            } else if (option2.isSelected()) {
+                text[0] = "slow";
+            } else if (option3.isSelected()) {
+                text[0] = "medium";
+            } else if (option4.isSelected()) {
+                text[0] = "fast";
+            }
+            if (yesFC.isSelected()) {
+                text[2] = "fading";
+            } else if (noFC.isSelected()) {
+                text[2] = "same";
+            }
+            nextGameInfoLabel.setText(text[0] + " and " + text[2] + " colors");
+            savesGameSettingLabel.setText("Saved!");
+        }); 
+        
+        backGameSettingsButton.setOnAction(e-> {
+            option1.setSelected(false);
+            option2.setSelected(false);
+            option3.setSelected(false);
+            option4.setSelected(false);
+            yesFC.setSelected(false);
+            noFC.setSelected(false);
+            savesGameSettingLabel.setText("");
+            stage.setScene(personalScene);   
+        });
+        
+        VBox gameSettingsPane = new VBox();
+        gameSettingsPane.getChildren().addAll(settingInfoLabel, speedLabel, speeds, 
+                fadingColorsLabel, fatingColors, saveGameSettingsButton, 
+                backGameSettingsButton, savesGameSettingLabel);
+        gameSettingsPane.setId("basic");
+        
+        gameSettingsScene = new Scene(gameSettingsPane, 385, 770); 
+        gameSettingsScene.getStylesheets().add("file:style.css");
+        
         
         stage.setScene(signInOrSignUpScene);
         
