@@ -195,12 +195,9 @@ public class Game {
         }
     }
     private void updateType9() {
-        if (this.movingPart[3][1] == 25) {
-            return;
-        }
         if (this.type == 9 ) {
-            if (this.field[this.movingPart[0][0]][this.movingPart[0][1] + 1] == 0 && 
-                    this.field[this.movingPart[3][0]][this.movingPart[3][1] + 1] == 0) {
+            if (this.roomUnder(this.movingPart[0][0],this.movingPart[0][1]) && 
+                    this.roomUnder(this.movingPart[3][0],this.movingPart[3][1])) {
                 for (int x = 3; x >= 0; x--) {
                     if (this.movingPart[x][0] != -1) {
                         this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
