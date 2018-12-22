@@ -24,13 +24,13 @@ Arcade means that the speed is growing as player's score grow.
 ### User interface
 
 UI consists of 5 scenes. 
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI1.png" width="300">
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI2.png" width="300">
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI3.png" width="300">
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI4.png" width="300">
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI5.png" width="300">
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI6.png" width="300">
-<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI7.png" width="300">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI1.png" width="100">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI2.png" width="100">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI3.png" width="100">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI4.png" width="100">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI5.png" width="100">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI6.png" width="100">
+<img src="https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/images/UI/UI7.png" width="100">
 
 ### What can be done in the future 
 
