@@ -1,7 +1,5 @@
 # Tetris
 
-### Purpose
-
 Tetris a real-time game. 
 ------------------------------------------------
 A link to the requirements analysis is [here](https://github.com/alisa1eli/ot-harjoitustyo/blob/master/documentation/RequirementsAnalysis.md)
