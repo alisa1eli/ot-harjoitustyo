@@ -24,25 +24,6 @@ public class GameTest {
         this.game = new Game();
     }
 
-    @Test
-    public void methodSetAllZeroesWorksProperly() {
-        int[][] a = new int[2][2];
-        a[0][0] = 1;
-        a[0][1] = 2;
-        a[1][0] = 3;
-        a[1][1] = 4;
-        a = game.setAllTheSameValue(a, 0);
-        assertEquals(" 0 0, 0 0,", game.matrixToString(a) );
-    }
-    @Test
-    public void methodMatrixToStringWorksProperly() {
-        int[][] a = new int[2][2];
-        a[0][0] = 1;
-        a[0][1] = 2;
-        a[1][0] = 3;
-        a[1][1] = 4;
-        assertEquals(" 1 2, 3 4,", game.matrixToString(a) );
-    }
     @Test 
     public void whenGameStartsTypeOfTheFirstFigureIsOne() {
         assertEquals("1", game.getType()+"");

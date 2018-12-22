@@ -21,6 +21,8 @@ public class Game {
     int points;
     Move move;
     Block block;
+    Rotate rotate;
+
     
     public Game() {
         this.field = new int[11][26];
@@ -36,6 +38,8 @@ public class Game {
         this.points = 0;
         this.level = new Level();
         this.move = new Move();
+        this.rotate = new Rotate();
+
     }
     public void setMovingPartPosition(int t, int row, int x, int y, int xDelete, int yDelete) {
 
@@ -92,14 +96,13 @@ public class Game {
      * FALSE means that the game is over. 
      */
     public boolean update() {
-        String beforeUpdate = Arrays.deepToString(this.movingPart);             // this way will be possible compared if the moving part has moved or it is already on the bottom and a new blocks are needed
-
-        updateType1();                                                          // the moving part is updated by its type
-        updateType2();
-        updateType6();
-        updateType8();
-        updateType9();
-
+        String beforeUpdate = Arrays.deepToString(this.movingPart);  
+//        System.out.println("Before Update: ");// this way will be possible compared if the moving part has moved or it is already on the bottom and a new blocks are needed
+//        this.printMatrix(field);
+        this.setMovingPart(this.move.update(this.field, this.movingPart));
+//        System.out.println("After:");
+//        this.printMatrix(field);
+//        System.out.println("-----------------------------------------");
         if (Arrays.deepToString(this.movingPart).equals(beforeUpdate)) {
             this.aRowIsFull();                                                  // the program checks is there are any full rows
             Random random = new Random();                                       // to choose the next block
@@ -110,104 +113,6 @@ public class Game {
             this.addNewFigure(this.type);
         }
         return true;
-    }
-    /**
-     * This method contains logics, with which blocks of types 1, 4, 5 
-     * updated ( = moved down).
-     */
-    private void updateType1() {
-        if (this.type == 1 || this.type == 4 || this.type == 5) {
-            for (int x = 0; x < 4; x++) {
-                if (this.movingPart[x][0] != -1 && this.movingPart[x][1] != -1) {
-                    if (this.roomUnder(movingPart[x][0], movingPart[x][1])) {
-                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
-                    }
-                } else {
-                    return;
-                }
-            }
-        }
-    }
-    /**
-     * This method contains logics, with which blocks of types 2, 3 
-     * will be updated ( = moved down).
-     */
-    private void updateType2() {
-        int b = 0;
-        int a = 0;
-        if (this.type == 2 || this.type == 3) {
-            for (int x = 0; x < 4; x++) {
-                if (this.movingPart[x][0] != -1) {
-                    b++;
-                    if (this.roomUnder(this.movingPart[x][0], this.movingPart[x][1])) {
-                        a++;
-                    }
-                } 
-            }
-            if (a == b) {
-                for (int x = 0; x < 4; x++) {
-                    if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
-                    } 
-                }
-            }
-        }
-    }
-    
-    /**
-     * This method contains logics, with which blocks of types 6, 7 
-     * will be updated ( = moved down).
-     */
-    private void updateType6() {
-        int a = 0;
-        int b = 0;
-        if (this.type == 6 || this.type == 7) {
-            for (int x = 0; x < 3; x++) {
-                if (this.movingPart[x][0] != -1) {
-                    b++;
-                    if (this.roomUnder(this.movingPart[x][0], this.movingPart[x][1])) {
-                        a++;
-                    }
-                }
-            }
-            if (a == b) {
-                for (int x = 0; x < 3; x++) {
-                    if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
-                    } 
-                }
-                this.setMovingPartPosition(this.type, 3, movingPart[3][0], movingPart[3][1] + 1, movingPart[3][0], movingPart[3][1]);
-            } 
-        }
-    }
-    /**
-     * This method contains logics, with which blocks of types 8 
-     * will be updated ( = moved down).
-     */
-    private void updateType8() {
-        if (this.type == 8 ) {
-            if (this.roomUnder(this.movingPart[1][0],this.movingPart[1][1]) && 
-                    this.roomUnder(this.movingPart[3][0],this.movingPart[3][1])) {
-                for (int x = 3; x >= 0; x--) {
-                    if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
-                    } 
-                }
-            }
-        }
-    }
-    private void updateType9() {
-        if (this.type == 9 ) {
-            if (this.roomUnder(this.movingPart[0][0],this.movingPart[0][1]) && 
-                    this.roomUnder(this.movingPart[3][0],this.movingPart[3][1])) {
-                for (int x = 3; x >= 0; x--) {
-                    if (this.movingPart[x][0] != -1) {
-                        this.setMovingPartPosition(this.type, x, movingPart[x][0], movingPart[x][1] + 1, movingPart[x][0], movingPart[x][1]);
-                    } 
-                }
-            }
-        }
-        
     }
     
     /**
@@ -314,14 +219,15 @@ public class Game {
      * @param y 
      * @return TRUE if there some room, FALSE otherwise.
      */
-    public boolean roomUnder(int x, int y) {
-        if (y == 25) {
-            return false;
-        } else if (this.field[x][y + 1] == 0) {
-            return true;
-        }
-        return false;
-    }
+    
+//    public boolean roomUnder(int x, int y) {
+//        if (y == 25) {
+//            return false;
+//        } else if (this.field[x][y + 1] == 0) {
+//            return true;
+//        }
+//        return false;
+//    }
     
     /**
      * This method handles moving right, left and down.
@@ -334,34 +240,15 @@ public class Game {
     public void makeMove(int move) {
         // Right
         if (move == 1) {
-            makeMoveRight();
+            this.setMovingPart(this.move.moveRight(field, movingPart));
         } else if (move == 2) {    // left
-            makeMoveLeft(); 
-        } else if (move == 3) { 
-            makeMoveDown();                                                     // down
+            this.setMovingPart(this.move.moveLeft(field, movingPart)); 
+        } else if (move == 3) {   // to the bottom
+            this.setMovingPart(this.move.moveDown(field, movingPart));                                              // down
         }
 
     }
-    
-    private boolean onTheEdge(int a) {              // check if any blocks is next to the edge of the field, if so return TRUE
-        if (a == 1)  {                              // 1 stands for moving right 
-            for (int x = 0; x < 4; x++) {
-                if (this.movingPart[x][0] == 10) {
-                    return true;
-                }
-            }
-        } else if (a == 0) {                         // 0 stands for moving left 
-            for (int x = 0; x < 4; x++) {
-                if(this.movingPart[x][0] == 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    private void makeMoveRight() {
-        this.setMovingPart(this.move.moveRight(field, movingPart));
-    }    
+        
     private void setMovingPart(int[][] mP) {
         for (int x = 0; x < 4; x++) {
             if (this.movingPart[x][0] != -1) {
@@ -376,83 +263,17 @@ public class Game {
         }
     }
     
-    private void makeMoveLeft() {
-        this.setMovingPart(this.move.moveLeft(field, movingPart));        
-    }
-    private void makeMoveDown() {
-        this.setMovingPart(this.move.moveDown(field, movingPart));
-    }
-    
     /**
      * This method rotates the figure if it's possible. 
+     * The logics of this action is located in class Rotate.
+     * 
+     *
      */
     public void rotate() {
-        if (this.type == 1) {
-            return;
-        } else if (this.type == 2) {
-            if (this.field[this.movingPart[0][0]][this.movingPart[0][1] - 1] == 0) {
-                this.type = 4;
-                this.setMovingPartPosition(this.type, 1, this.movingPart[0][0], this.movingPart[0][1] - 1, this.movingPart[1][0], this.movingPart[1][1]);
-            }
-        } else if (this.type == 3) {
-            if (this.movingPart[1][1] == this.heigth - 1) {
-                return;
-            }
-            if (this.field[this.movingPart[1][0]][this.movingPart[1][1] + 1] == 0 && this.field[this.movingPart[1][0]][this.movingPart[1][1] - 1] == 0) {
-                this.type = 5;
-                this.setMovingPartPosition(this.type, 0, this.movingPart[1][0], this.movingPart[1][1] + 1, this.movingPart[0][0], this.movingPart[0][1]);
-                this.setMovingPartPosition(this.type, 2, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[2][0], this.movingPart[2][1]);
-            }
-        } else if (this.type == 4) {
-            if(this.movingPart[0][0] == this.length - 1) {
-                return;
-            }
-            if (this.field[this.movingPart[0][0] + 1][this.movingPart[0][1]] == 0) {
-                this.type = 2;
-                this.setMovingPartPosition(this.type, 1, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[1][0], this.movingPart[1][1]);
-            }
-        } else if (this.type == 5) {
-            if (this.movingPart[1][0] == 0 || this.movingPart[1][0] == this.length - 1) {
-                return;
-            }
-            if (this.field[this.movingPart[1][0] - 1][this.movingPart[1][1]] == 0 && this.field[this.movingPart[1][0] + 1][this.movingPart[1][1]] == 0) {
-                this.type = 3;
-                this.setMovingPartPosition(this.type, 0, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[0][0], this.movingPart[0][1]);
-                this.setMovingPartPosition(this.type, 2, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[2][0], this.movingPart[2][1]);
-            }
-        } else if (this.type == 6) {
-            if (this.movingPart[0][1] == this.length - 1 ) {
-                return;
-            }
-            if (this.field[this.movingPart[0][0]][this.movingPart[0][1] + 1] == 0) {
-                this.type = 8;
-                this.setMovingPartPosition(this.type, 3, this.movingPart[0][0], this.movingPart[0][1] + 1, this.movingPart[3][0], this.movingPart[3][1]);
-            }
-        } else if (this.type == 8) {
-            if (this.movingPart[0][0] == 0 ) {
-                return;
-            }
-            if (this.field[this.movingPart[0][0] - 1][this.movingPart[0][1]] == 0) {
-                this.type = 9;
-                this.setMovingPartPosition(this.type, 0, this.movingPart[0][0] - 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
-                this.setMovingPartPosition(this.type, 1, this.movingPart[1][0] - 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
-            }
-        } else if (this.type == 9) {
-            if (this.field[this.movingPart[1][0]][this.movingPart[1][1] - 1] == 0) {
-                this.type = 7;
-                this.setMovingPartPosition(this.type, 3, this.movingPart[1][0], this.movingPart[1][1] - 1, this.movingPart[3][0], this.movingPart[3][1]);
-            }
-        } else if (this.type == 7) {
-            if (this.movingPart[1][0] == this.length - 1) {
-                return;
-            }
-            if (this.field[this.movingPart[1][0] + 1][this.movingPart[0][1]] == 0) {
-                this.type = 6;
-                this.setMovingPartPosition(this.type, 1, this.movingPart[1][0] + 1, this.movingPart[1][1], this.movingPart[1][0], this.movingPart[1][1]);
-                this.setMovingPartPosition(this.type, 0, this.movingPart[0][0] + 1, this.movingPart[0][1], this.movingPart[0][0], this.movingPart[0][1]);
-
-            }
-        }
+        this.rotate.rotate(field, movingPart);
+        this.setField(this.rotate.getField());
+        this.movingPart = this.rotate.getMovingPart();
+        this.type = this.field[this.movingPart[0][0]][this.movingPart[0][1]];
     }
      
     /**
@@ -503,13 +324,13 @@ public class Game {
     }
     
     private int[][] getCurentTypeOfFigure() {
-        System.out.println("The type is "+ this.type);
         return this.block.getBlocks(this.type);
     }
     
     public String getColor(int x, int y) {
         return this.level.getColors()[this.field[x][y + 4]];
     }
+    
     public long getSpeed() {
         long speed = this.level.getSpeed();
         return speed;

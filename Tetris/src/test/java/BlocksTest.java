@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import tetris.domain.Block;
+import tetris.domain.Matrix;
 
 /**
  *
@@ -18,25 +19,16 @@ import tetris.domain.Block;
  */
 public class BlocksTest {
     Block blocks;
+    Matrix matrix;
 
     @Before
     public void setUp() {
         this.blocks = new Block();
+        this.matrix = new Matrix();
     }
     @Test 
-    public void methodSetAllTheSameValueWorksProperly() {
-        int[][] m = this.blocks.getBase();
-        assertEquals(" -1 -1 -1 -1, -1 -1 -1 -1,", this.blocks.matrixToString(m));
-    }
-    @Test 
-    public void canGetType1() {
+    public void itIsPosiibleToGetType1() {
         int[][] m = this.blocks.getBlocks(1);
-        assertEquals(" 5 4 -1 -1, -1 -1 -1 -1,", this.blocks.matrixToString(m));
+        assertEquals(" 5 4, -1 -1, -1 -1, -1 -1,", this.matrix.matrixToString(m));
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
 }

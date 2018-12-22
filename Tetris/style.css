@@ -48,6 +48,7 @@ and open the template in the editor.
         -fx-text-fill:#ffffff;
         -fx-font-family: "Helvetica";
         -fx-font-size: 50;
+        -fx-text-alignment:center;
     }
     #insertInformation {
         -fx-alignment: center;

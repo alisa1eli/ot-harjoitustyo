@@ -242,7 +242,7 @@ public class TetrisUi extends Application {
             String login = loginSignIn.getText();
             try {
                 if (this.tetrisService.userWithThatLoginFound(login)) {
-                    welcomePersonalSceneLabel.setText("Welcome " + this.tetrisService.getSignedInUser().getName() + "!");
+                    welcomePersonalSceneLabel.setText("Welcome\n" + this.tetrisService.getSignedInUser().getName() + "!");
                     loginSignIn.setText("");
                             // the next lines checks if there any saved old games. If so, 3 best are showed.
                             // Start:
@@ -507,7 +507,7 @@ public class TetrisUi extends Application {
                     if (updatedName.length() > 3 && updatedName.length() < 15) {
                         try {
                             this.tetrisService.updateUsersName(updatedName);
-                            welcomePersonalSceneLabel.setText("Welcome " + this.tetrisService.getSignedInUser().getName() + "!");
+                            welcomePersonalSceneLabel.setText("Welcome\n" + this.tetrisService.getSignedInUser().getName() + "!");
                             wrongUpdatedNamelabe.setText("Successfully updated!");
 
                         } catch (SQLException ex) {

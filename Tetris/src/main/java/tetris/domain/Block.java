@@ -116,17 +116,6 @@ public class Block {
         int[][] r = {{-1, -1},{ -1 ,-1},{ -1, -1},{ -1, -1}};
         return r;
     }
-    
-    public String matrixToString(int a[][]) {
-        String r = "";
-        for (int i = 0; i < a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                r = r + " " + a[i][j];
-            }
-            r = r + ",";
-        }
-        return r;
-    }
-    
+  
 
 }
