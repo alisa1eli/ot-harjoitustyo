@@ -9,16 +9,27 @@ import java.util.List;
 import tetris.domain.OldGame;
 
 /**
- *
+ * This class interacts with table Game.
+ * 
  * @author alisaelizarova
  */
-public class GameDao implements Dao<OldGame, Integer> {
+public class GameDao {
     private final Database db;
     
+    /**
+     * This class sets database of this class.
+     * @param db  (Database)
+     */
     public GameDao(Database db) {
         this.db = db;
     } 
     
+    /**
+     * This method returns all games of one user.
+     * @param key - login of that user
+     * @throws SQLException if db is not found
+     * @return list of old games (ArrayList<OldGame>)
+     */
     public ArrayList<OldGame> findAllGamesOfOneUser(String key) throws SQLException {
         Connection connection = db.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Game WHERE userId = ?");
@@ -41,6 +52,13 @@ public class GameDao implements Dao<OldGame, Integer> {
         return games;
     }
     
+    /**
+     * This class saves a game into db.
+     * @param object - game to be saved (OldGame)
+     * @param userId - user the game belongs to
+     * @throws SQLException if db is not found
+     * @return saved old game (OldGame)
+     */
     public OldGame save(OldGame object, String userId) throws SQLException {
         Connection conn = db.getConnection();
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO Game"
@@ -65,30 +83,4 @@ public class GameDao implements Dao<OldGame, Integer> {
  
         return object;
     }
-
-    @Override
-    public OldGame findOne(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    @Override
-    public List<OldGame> findAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public OldGame update(OldGame object) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(Integer key) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public OldGame save(OldGame object) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

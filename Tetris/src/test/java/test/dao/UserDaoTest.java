@@ -1,3 +1,5 @@
+package test.dao;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,7 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tetris.dao.Dao;
 import tetris.dao.Database;
 import tetris.dao.UserDao;
 import tetris.domain.User;
@@ -53,10 +54,6 @@ public class UserDaoTest {
     @Test 
     public void userCanBeFoundByTheirId() throws SQLException {
         assertEquals(  "AlisaName" , ((User)this.dao.findOne("alisa")).getName());
-    }
-    @Test 
-    public void userCanBeFoundByTheirName() throws SQLException {
-        assertEquals(  "user2", this.dao.findOneByName("user2Name").getId());
     }
     @Test
     public void userCanBeDeleted() throws SQLException {

@@ -92,6 +92,7 @@ public class TetrisUi extends Application {
         }); 
         
         signInButton.setOnAction(e-> {
+            firstPageLabel.setText("");
             stage.setScene(signInScene);   
         }); 
         

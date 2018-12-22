@@ -13,17 +13,26 @@ import java.util.List;
 import tetris.domain.User;
 
 /**
- *
+ * This class interacts with table User.
+ * 
  * @author alisaelizarova
  */
-public class UserDao implements Dao<User, String> {
+public class UserDao {
     private final Database db;
     
+    /**
+     * This class sets database of this class.
+     * @param db  (Database)
+     */
     public UserDao(Database db) {
         this.db = db;
     } 
-    
-    @Override
+    /**
+     * This method returns one user with id (key).
+     * @param key - id ( = login )
+     * @throws SQLException if db is not found
+     * @return an user (User)
+     */
     public User findOne(String key) throws SQLException {
         Connection connection = db.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM User WHERE id = ?");
@@ -48,35 +57,11 @@ public class UserDao implements Dao<User, String> {
         return u;
     }
     
-    
-    public User findOneByName(String name) throws SQLException {
-        Connection connection = db.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM User WHERE name = ?");
-        stmt.setObject(1, name);
-
-        ResultSet rs = stmt.executeQuery();
-        boolean hasOne = rs.next();
-        if (!hasOne) {
-            return null;
-        }
-
-        String id = rs.getString("id");
-       
-        User u = new User(id, name);
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return u;
-    }
-    
-    @Override
-    public List<User> findAll() throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
+    /**
+     * This method deletes an user with id.
+     * @param id - user's id (= login) 
+     * @throws SQLException if db is not found
+     */
     public void delete(String id) throws SQLException {
         Connection conn = db.getConnection();
         PreparedStatement stmt = conn.prepareStatement("DELETE FROM User WHERE id = ? ");
@@ -86,13 +71,15 @@ public class UserDao implements Dao<User, String> {
         stmt.close();
     }
     
-    public User saveOrUpdate(User object) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
     
-    @Override
+    /**
+     * This method saves an new user into db.
+     * If user's id already in db, the method return NULL;
+     * @param object - user 
+     * @throws SQLException if db is not found
+     * @return saved user 
+     */
     public User save(User object) throws SQLException {
-//         if id isn't unique, returns NULL
         User alreadyExists = this.findOne(object.getId());
         if (alreadyExists != null) {
             return null;
@@ -111,8 +98,12 @@ public class UserDao implements Dao<User, String> {
         return object;
     }
     
-    // name can be only changed
-    @Override
+    /**
+     * This method updates user's name. Only name can be updated.
+     * @param object - user 
+     * @throws SQLException if db is not found
+     * @return user with the new name
+     */
     public User update(User object) throws SQLException {
         Connection conn = db.getConnection();
         PreparedStatement stmt = conn.prepareStatement("UPDATE User SET "

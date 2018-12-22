@@ -1,7 +1,8 @@
 package tetris.dao;
 
 /**
- *
+ * This class sets the connection with the database.
+ * 
  * @author alisaelizarova
  */
 
@@ -13,15 +14,25 @@ import java.util.List;
 public class Database {
 
     private final String databaseAddress;
-
+    /**
+     * This method sets address to the database.
+     * @param databaseAddress ( String )
+     * @throws ClassNotFoundException if address is not correct
+     */
     public Database(String databaseAddress) throws ClassNotFoundException {
         this.databaseAddress = databaseAddress;
     }
-
+    /**
+     * This method return connection.
+     * @return connection to db (Connection)
+     * @throws  SQLException if db not found
+     */
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(databaseAddress);
     }
-
+    /**
+     * This method creates two tables (Game and User), if needed.
+     */
     public void init() {
 
         List<String> commands = sqliteCommands();
@@ -30,7 +41,6 @@ public class Database {
             Statement st = conn.createStatement();
 
             for (String command : commands) {
-                System.out.println("Running command >> " + command);
                 st.executeUpdate(command);
             }
 

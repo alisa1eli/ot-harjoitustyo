@@ -1,3 +1,5 @@
+package test.domain;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -27,23 +29,7 @@ public class UserTest {
        this.user = new User("User", "Password");
     }
 
-//    @Test 
-//    public void anOldGameCanBeAdded() {
-//        this.user.addAnOldGame(120);
-//        assertTrue(1 == this.user.getOldGames().size());
-//    }
-//    @Test
-//    public void whenAnOldGameAddedTheScoreSavedCorrectly() {
-//        this.user.addAnOldGame(120);
-//        assertTrue(120 == this.user.getOldGames().get(0).getScore());
-//    }
-//    @Test 
-//    public void userCanDeleteAnOldGameWithItsId() {
-//        this.user.addAnOldGame(120);
-//        String id = this.user.getOldGames().get(0).getId();
-//        this.user.deleteAnOldGame(id);
-//        assertTrue(0 == this.user.getOldGames().size());
-//    }
+
     @Test
     public void nameCanBeChanged() {
         this.user.setName("Name");
