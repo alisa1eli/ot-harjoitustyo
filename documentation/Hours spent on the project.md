@@ -11,5 +11,8 @@
 | 04.12 | 5.0 | tetris game (2/3) |
 | 10.12 | 8.0 | Updating logics of the app|
 | 11.12 | 7.0 | Updating complete. Rotation is possible for several blocks| 
+| 18.12 | 7.0 | Improving project |
+| 21.12 | 6.0 | Separating and improving methods of class Game |
+| 22.12 | 6.0 | Cleaning code, writing JAvaDoc and documentation |
 
-### So far, I've spent 28.2 hours on the project.
+### So far, I've spent 54.2 hours on the project.
