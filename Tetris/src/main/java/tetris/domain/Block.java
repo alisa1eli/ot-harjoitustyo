@@ -6,13 +6,20 @@
 package tetris.domain;
 
 /**
- *
+ * In this method initial positions of the blocks are saved.
+ * 
  * @author alisaelizarova
  */
 public class Block {
-    public Block() {
-    }
-    
+    /**
+     * This method takes the type as a parameter and return 
+     * the position of the block according to its type.
+     * 
+     * The method gets the position from other private methods;
+     * 
+     * @param type type of the moving blocks (int)
+     * @return initial position (int[][])
+     */
     public int[][] getBlocks(int type) {
         switch (type) {
             case 1:            return this.getBlockType1();
@@ -29,13 +36,13 @@ public class Block {
         return this.getBlockType1();
     }
     
-    public int[][] getBlockType1() {
+    private int[][] getBlockType1() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 4;
         return a;
     }
-    public int[][] getBlockType2() {
+    private int[][] getBlockType2() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 4;
@@ -43,7 +50,7 @@ public class Block {
         a[1][1] = 4;
         return a;
     }
-    public int[][] getBlockType3() {
+    private int[][] getBlockType3() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 4;
@@ -53,7 +60,7 @@ public class Block {
         a[2][1] = 4;
         return a;
     }
-    public int[][] getBlockType4() {
+    private int[][] getBlockType4() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 4;
@@ -61,7 +68,7 @@ public class Block {
         a[1][1] = 3;
         return a;
     } 
-    public int[][] getBlockType5() {
+    private int[][] getBlockType5() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 4;
@@ -71,7 +78,7 @@ public class Block {
         a[2][1] = 2;
         return a;
     } 
-    public int[][] getBlockType6() {
+    private int[][] getBlockType6() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 4;
@@ -81,7 +88,7 @@ public class Block {
         a[3][1] = 3;
         return a;
     } 
-    public int[][] getBlockType7() {
+    private int[][] getBlockType7() {
         int[][] a = this.getBase();
         a[0][0] = 4;
         a[0][1] = 4;
@@ -91,7 +98,7 @@ public class Block {
         a[3][1] = 3;
         return a;
     }
-    public int[][] getBlockType8() {
+    private int[][] getBlockType8() {
         int[][] a = this.getBase();
         a[0][0] = 5;
         a[0][1] = 3;
@@ -101,7 +108,7 @@ public class Block {
         a[3][1] = 4;
         return a;
     }
-    public int[][] getBlockType9() {
+    private int[][] getBlockType9() {
         int[][] a = this.getBase();
         a[0][0] = 4;
         a[0][1] = 3;
@@ -112,10 +119,9 @@ public class Block {
         return a;
     }
     
-    public int[][] getBase() {
-        int[][] r = {{-1, -1},{ -1 ,-1},{ -1, -1},{ -1, -1}};
+    private int[][] getBase() {
+        int[][] r = {{-1, -1}, { -1, -1}, { -1, -1}, { -1, -1}};
         return r;
     }
-  
 
 }

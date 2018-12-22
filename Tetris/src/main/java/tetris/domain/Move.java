@@ -13,10 +13,17 @@ import java.util.Arrays;
  * @author alisaelizarova
  */
 public class Move {
+    
     Matrix matrix;
+    
+    /**
+     * No parameters required. 
+     * Class Matrix is in use now.
+     */
     public Move() {
         this.matrix = new Matrix();
     }
+    
     /**
      * This method updates, if it's possible, the position of the moving blocks (referred as movingPart).
      * Updating means that the blocks will be moved to the row below.
@@ -111,11 +118,11 @@ public class Move {
         int[][] movingPart = this.matrix.copyArray(mP);
         int[][] fakeField = this.matrix.copyArray(field);
         int type = fakeField[movingPart[0][0]][movingPart[0][1]];
-        while(!Arrays.deepToString(movingPart).equals(Arrays.deepToString(mPCopy))) {
+        while (!Arrays.deepToString(movingPart).equals(Arrays.deepToString(mPCopy))) {
             mPCopy = this.matrix.copyArray(movingPart);
             movingPart = this.update(fakeField, movingPart);
             for (int x = 0; x < 4; x++) {
-                if (movingPart[x][0]!= -1) {
+                if (movingPart[x][0] != -1) {
                     fakeField[movingPart[x][0]][movingPart[x][1]] = type;
                 }
             }

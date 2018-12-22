@@ -327,7 +327,7 @@ public class TetrisUi extends Application {
             Canvas gameField = new Canvas(420, 770);
             
             Game game = new Game();
-            game.setLevel(nextGameInfoLabel.getText());
+            game.setParametersOfTheNextGame(nextGameInfoLabel.getText());
             int height = game.getHeigth() - 4;
             int lenght = game.getLength();
             int[][] a = game.visible();

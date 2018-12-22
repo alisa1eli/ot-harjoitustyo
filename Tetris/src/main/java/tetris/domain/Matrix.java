@@ -12,6 +12,14 @@ package tetris.domain;
  */
 public class Matrix {
     
+     /**
+     * This method takes a matrix and returns its String form. 
+     * Used for tests.
+     * 
+     * @param m - matrix (int[][])
+     * 
+     * @return matrix in String (String). 
+     */
     public String matrixToString(int[][] m) {
         String r = "";
         for (int i = 0; i < m.length; i++) {
@@ -22,6 +30,16 @@ public class Matrix {
         }
         return r;
     }
+    
+    /**
+     * This method takes a matrix and sets its all numbers to the same value (a) 
+     * Used for tests.
+     * 
+     * @param m - matrix (int[][])
+     * @param a - value (int)
+     * 
+     * @return updated matrix (int[][]). 
+     */
     public int[][] setAllTheSameValue(int[][] m, int a) {
         for (int x = 0; x < m.length; x++) {
             for (int y = 0; y < m[x].length; y++) {
@@ -30,6 +48,15 @@ public class Matrix {
         }
         return m;
     }
+    
+    /**
+     * This method make a copy of a matrix/ array. 
+     * New array will not changed if the old one is modified.
+     * 
+     * @param m - matrix (int[][])
+     * 
+     * @return copy of the matrix (int[][]). 
+     */
     public int[][] copyArray(int[][] m) {
         int[][] r = new int[m.length][m[0].length];
         for (int i = 0; i < m.length; i++) {
